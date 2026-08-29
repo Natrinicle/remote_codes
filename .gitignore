@@ -1,0 +1,106 @@
+# Camera originals — often GPS EXIF. Keep curated remote.jpg / unit*.jpg / label.jpg.
+IMG*.jpg
+IMG*.jpeg
+IMG*.heic
+IMG*.HEIC
+PXL*.jpg
+PXL*.jpeg
+DSC*.jpg
+DSCN*.jpg
+*.dng
+*.cr2
+*.nef
+*.arw
+*.raf
+
+# Accidental dumps at repo root (unit captures live under Infrared/)
+/*.ir
+/*.jpg
+/*.jpeg
+/*.png
+/*.heic
+
+# Flipper / qFlipper debris
+.flipper/
+*.ir.bak
+*.ir.backup
+*.ir~
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+!.env*.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.credentials
+*credentials*.json
+auth.json
+
+# Python / encode helpers
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+.env/
+.ruff_cache/
+.mypy_cache/
+.pytype/
+.pytest_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+dist/
+build/
+*.egg-info/
+
+# OS / editor
+*~
+*.swp
+*.swo
+.*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+*.orig
+*.bak
+*.tmp
+*.temp
+*.part
+.directory
+
+# Sync / conflict debris
+*.sync-conflict-*
+*.sync-conflict.*
+.Syncthing*
+.stfolder
+.stversions
+
+# VCS / IDE local
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-*
+.project
+.classpath
+.settings/
+
+# Agent local (keep tracked skills)
+.claude/settings.local.json
+.claude/*.local.json
+.grok/*.local.toml
+.grok/*.local.json
+*.local
+*.local.*
+
+# Logs
+*.log
+*.log.*
