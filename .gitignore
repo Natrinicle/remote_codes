@@ -7,6 +7,8 @@ PXL*.jpg
 PXL*.jpeg
 DSC*.jpg
 DSCN*.jpg
+# Kept-but-untracked originals in unit folders: IMG20260901132659.ignore.jpg
+*.ignore.*
 *.dng
 *.cr2
 *.nef

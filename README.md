@@ -12,11 +12,13 @@ Browse from [Infrared](Infrared/): type → brand → model. Each of those folde
 |--------|------|------|----------|
 | HAPPRUN H1 projector | [Infrared/Projectors/Haprun/H1](Infrared/Projectors/Haprun/H1/) | `Haprun_H1.ir` | NEC, address `0x02` |
 | Carrier Air V ceiling cassette | [Infrared/HVAC/Carrier/Air V](Infrared/HVAC/Carrier/Air%20V/) | `Carrier_Air_V.ir` | 36-bit pulse-distance, 38 kHz |
+| Sony UBP-X700 Ultra HD Blu-ray | [Infrared/Bluray_Players/Sony/UBP-X700](Infrared/Bluray_Players/Sony/UBP-X700/) | `Sony_UBP-X700.ir` | SIRC20 address `5A 1C` |
 
 ## Layout
 
 ```
 Infrared/
+  Bluray_Players/Sony/UBP-X700/
   HVAC/Carrier/Air V/
   Projectors/Haprun/H1/
 ```
@@ -32,16 +34,24 @@ Infrared/
 
 Photos in this repo are deskewed, background-removed, and cleaned of dirt. Button artwork is not redrawn.
 
-## Agent skills
+## Agent toolkit
 
-Project skills load when this repo is opened in Claude Code or Grok:
+[`toolkit.yaml`](toolkit.yaml) marks this repo as an **agent toolkit**. Skills and
+rules load when the repo is opened in Claude Code or Grok.
 
-| Skill | Path |
-|-------|------|
+| Kind | Path |
+|------|------|
 | `flipper-ir-library` | [`.claude/skills/flipper-ir-library`](.claude/skills/flipper-ir-library/) (Grok: [`.grok/skills/…`](.grok/skills/flipper-ir-library/)) |
 | `decoding-ir-protocols` | [`.claude/skills/decoding-ir-protocols`](.claude/skills/decoding-ir-protocols/) |
+| `skill-toolkit-sync` | [`.claude/rules/skill-toolkit-sync.md`](.claude/rules/skill-toolkit-sync.md) |
 
-Use them for new captures: photos, FCC plates, README tree, raw IR decode, encode scripts. After a folder move, run `python3 .claude/skills/flipper-ir-library/scripts/check_readme_links.py`.
+Use the skills for new captures: photos (cutout onto white for dense I/O; keep
+camera files as `*.ignore.jpg`), FCC plates, README tree, raw IR decode, encode
+scripts. After a folder move, run
+`python3 .claude/skills/flipper-ir-library/scripts/check_readme_links.py`.
+
+Edits to a skill or rule are copied into this toolkit in the same turn; you
+will be asked before other toolkit repos are updated.
 
 ## License
 

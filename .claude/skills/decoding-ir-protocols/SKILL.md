@@ -1,7 +1,7 @@
 ---
 name: decoding-ir-protocols
 description: >
-  Use when Flipper saved a raw .ir that is not parsed NEC/Samsung/RC5/RC6; when
+  Use when Flipper saved a raw .ir that is not parsed NEC/NECext/Samsung32/RC5/RC6/SIRC/SIRC15/SIRC20; when
   decoding AC, HVAC, ceiling cassette, or other state-based infrared remotes;
   when temperature, fan, mode, or timer captures need a bit map; or when writing
   an encode script for custom Flipper IR codes.

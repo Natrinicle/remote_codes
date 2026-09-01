@@ -4,6 +4,7 @@ Flipper Zero captures, grouped by device type.
 
 | Type | Path |
 |------|------|
+| Bluray Players | [Bluray Players](Bluray_Players/) |
 | HVAC | [HVAC](HVAC/) |
 | Projectors | [Projectors](Projectors/) |
 
