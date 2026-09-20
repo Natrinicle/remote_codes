@@ -1,8 +1,9 @@
 name: remote_codes
-version: "0.1.0"
+version: "0.2.1"
 description: >
-  Flipper Zero IR library agent toolkit: pack layout, photo cleanup (including
-  dense rear I/O cutouts), FCC plates, README tree, and raw-protocol decode.
+  Flipper Zero IR library plus BLE protocol notes: pack layout, photo cleanup
+  (including dense rear I/O cutouts), FCC plates, README tree, raw-IR decode,
+  and GATT framing helpers.
 
 kinds: [agent]
 
@@ -10,11 +11,12 @@ paths:
   agent_skills: .claude/skills/
   agent_rules: .claude/rules/
   infrared: Infrared/
+  bluetooth: Bluetooth/
 
 install:
   note: >
     Open this repo in Claude Code or Grok so `.claude/skills` and `.claude/rules`
     load. Grok also follows `.grok/skills` (symlinks to `.claude/skills`).
 
-agent_skills_included: 2
-agent_rules_included: 1
+agent_skills_included: 5
+agent_rules_included: 2
