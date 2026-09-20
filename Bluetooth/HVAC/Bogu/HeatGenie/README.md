@@ -43,8 +43,12 @@ RX: CRC of the **full** frame must be 0.
 
 | CMD | Meaning |
 |-----|---------|
-| 97 | button: 1 ON, 2 OFF (A1 = random) |
+| 97 | button: 1 ON, 2 OFF. **A1 must be a new 1–255 random each press.** |
 | 101 | auto report: `[2, 20, 30]` start, `[2, 0, 30]` stop |
+
+ACK: `AA 00 41 d rand …` (`d=0` ok, `d=1` repeat — ignored). Cancel ON within ~1–2 s using a **different** random OFF; the panel shows `CLER` then cooldown. After that window the unit finishes ignition/heat before another OFF is taken.
+
+`./encode_heatgenie.py on` / `off` pick a random A1 unless you pass `--rand`.
 
 Status notify is 52 bytes: `AA 09 FF … F2` + 40-byte register map (temps are
 **tenths of °C**). App °F = `trunc((320 + 1.8 * raw) / 10)`.

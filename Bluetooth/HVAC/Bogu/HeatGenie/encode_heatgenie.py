@@ -12,6 +12,7 @@ Example:
 from __future__ import annotations
 
 import argparse
+import secrets
 import sys
 
 # CRC-16-CCITT nibble table from HeatGenie app-service.js Ee()
@@ -84,7 +85,10 @@ def auto_updata(*, interval: int = 20) -> bytes:
     return cmd_frame(DB0_DN_AUTO_UPDATA, ADDR_TYPE_REG, interval, 30)
 
 
-def power(on: bool, random_byte: int = 1) -> bytes:
+def power(on: bool, random_byte: int | None = None) -> bytes:
+    """DB0_DN_CMD. random_byte must be unique vs the last key or the heater ACKs repeat."""
+    if random_byte is None:
+        random_byte = secrets.randbelow(255) + 1
     return cmd_frame(DB0_DN_CMD, CMD_ON if on else CMD_OFF, random_byte, 0)
 
 
@@ -155,9 +159,13 @@ def main() -> int:
     sub.add_parser("auto", help="AUTO_UPDATA start (2 s reports)")
     sub.add_parser("auto-stop", help="AUTO_UPDATA stop")
     p_on = sub.add_parser("on", help="power ON frame (writeNoResponse to 3A01)")
-    p_on.add_argument("--rand", type=int, default=1)
+    p_on.add_argument(
+        "--rand", type=int, default=None, help="A1 random 1-255 (default: fresh)"
+    )
     p_off = sub.add_parser("off", help="power OFF frame")
-    p_off.add_argument("--rand", type=int, default=1)
+    p_off.add_argument(
+        "--rand", type=int, default=None, help="A1 random 1-255 (default: fresh)"
+    )
     p_dec = sub.add_parser("decode", help="decode a 52-byte status hex dump")
     p_dec.add_argument("hex")
     sub.add_parser("self-test", help="check CRC and decode vectors")
