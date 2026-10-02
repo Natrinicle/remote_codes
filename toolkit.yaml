@@ -1,9 +1,10 @@
 name: remote_codes
-version: "0.2.1"
+version: "0.2.2"
 description: >
   Flipper Zero IR library plus BLE protocol notes: pack layout, photo cleanup
   (including dense rear I/O cutouts), FCC plates, README tree, raw-IR decode,
-  and GATT framing helpers.
+  and GATT framing helpers (HeatGenie E-10 waits for cooldown, then unique-random
+  vent/ON; encode_heatgenie.py vent/clear).
 
 kinds: [agent]
 
