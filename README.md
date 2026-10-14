@@ -67,6 +67,10 @@ scripts. After a folder move, run
 Edits to a skill or rule are copied into this toolkit in the same turn; you
 will be asked before other toolkit repos are updated.
 
+## Checks
+
+`.pre-commit-config.yaml` runs gitleaks and hygiene. IR captures and photos are excluded so `.ir` files stay byte-stable. `pre-commit install`.
+
 ## License
 
 [CC0 1.0](LICENSE). Codes and photos are dedicated to the public domain. Brand names remain the manufacturers'.
