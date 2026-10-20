@@ -1,10 +1,11 @@
 name: remote_codes
-version: "0.2.3"
+version: "0.2.7"
 description: >
-  Flipper Zero IR library plus BLE protocol notes: pack layout, photo cleanup
-  (including dense rear I/O cutouts), FCC plates, README tree, raw-IR decode,
-  and GATT framing helpers (HeatGenie E-10 waits for cooldown, then unique-random
-  vent/ON; encode_heatgenie.py vent/clear).
+  Flipper Zero IR library plus BLE and LAN protocol notes: pack layout, photo
+  cleanup (including dense rear I/O cutouts), FCC plates, README tree, raw-IR
+  decode, GATT framing helpers (HeatGenie E-10 waits for cooldown, then
+  unique-random vent/ON; encode_heatgenie.py vent/clear), and EyeBond/SmartESS
+  local hijack (UDP 58899 / TCP 8899, SRNE Modbus RTU; encode_smartess.py).
 
 kinds: [agent]
 
@@ -13,6 +14,7 @@ paths:
   agent_rules: .claude/rules/
   infrared: Infrared/
   bluetooth: Bluetooth/
+  network: Network/
 
 install:
   note: >
