@@ -1,20 +1,21 @@
-# Luxpower (UART / TCP / BLE)
+# Luxpower (UART)
 
-Luxpower LXP / SNA / ACS / GridBoss hybrids. Transport is USB UART, TCP,
-or a BLE connection depending on the box.
+Luxpower LXP / SNA / ACS / GridBoss hybrids on **USB UART**. This is not
+Voltronic QPIGS and not SRNE Modbus `@256`.
 
-This is not Voltronic QPIGS and not SRNE Modbus `@256`. No encoder in this
-folder until a unit is on the bench.
+No encoder in this folder until a unit is on the bench.
+
+TCP notes: [Network/Inverters/Luxpower](../../../Network/Inverters/Luxpower/).
+BLE notes: [Bluetooth/Inverters/Luxpower](../../../Bluetooth/Inverters/Luxpower/).
 
 ## Identification
 
 | | |
 |--|--|
 | Models | LXP, SNA, ACS, GridBoss |
-| Transport | UART, TCP, or BLE |
+| Transport | USB UART |
 
 ## Notes
 
 - Own hardware only.
-- BLE and TCP are different reaches of the same inverter family; do not
-  mix them with an SRNE CH340 session.
+- BLE, UART, and TCP are different reaches of the same inverter family.

@@ -25,7 +25,7 @@ those folders has its own README.
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
 | SRNE hybrid USB UART | [Serial/Inverters/SRNE](Serial/Inverters/SRNE/) | `encode_srne.py` | Modbus RTU FC3/FC6, 9600 8N1 |
 | Voltronic Axpert / InfiniSolar | [Serial/Inverters/Voltronic](Serial/Inverters/Voltronic/) | `encode_voltronic.py` | ASCII QPIGS HID or UART |
-| JBD / Xiaoxiang BMS UART | [Serial/BMS/JBD](Serial/BMS/JBD/) | `encode_jbd_uart.py` | `DD A5` / `77`, 9600 8N1 |
+| JBD / Xiaoxiang BMS | [Bluetooth/BMS/JBD](Bluetooth/BMS/JBD/) | `encode_jbd.py` | BLE GATT `FF00` / `FF01` / `FF02`, `DD A5` / `77` |
 
 ## Layout
 
@@ -36,11 +36,17 @@ Infrared/
   Projectors/Haprun/H1/
 Bluetooth/
   HVAC/Bogu/HeatGenie/
+  BMS/JBD/
+  Inverters/Luxpower/
 Network/
   Inverters/EyeBond/SmartESS/
+  Inverters/GoodWe/
+  Inverters/Luxpower/
 Serial/
   Inverters/SRNE/
   Inverters/Voltronic/
+  Inverters/GoodWe/
+  Inverters/Luxpower/
   BMS/JBD/
 ```
 
@@ -59,7 +65,7 @@ BLE: same type/brand/model tree under `Bluetooth/`. Put framing in `encode_*.py`
 
 LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58899 or listen on TCP 8899. Do not commit APKs, collector serials, or site IPs. Do not port-forward those ports.
 
-Serial: same tree under `Serial/`. Helpers print USB UART / HID / RS485 payloads; they do not open `/dev/ttyUSB0` or `/dev/hidraw0`. A CH340 stick is not automatically Voltronic.
+Serial: same tree under `Serial/` for USB UART, USB HID, RS485, and CAN. Helpers print payloads; they do not open `/dev/ttyUSB0` or `/dev/hidraw0`. A CH340 stick is not automatically Voltronic. BLE GATT (including JBD `FF00`) lives under `Bluetooth/`.
 
 Photos in this repo are deskewed, background-removed, and cleaned of dirt. Button artwork is not redrawn.
 

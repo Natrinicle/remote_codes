@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Encode JBD / Xiaoxiang BMS UART frames (same payload as BLE FF00).
+"""Encode JBD / Xiaoxiang BMS bodies for BLE GATT FF02 (and USB UART).
 
-USB UART is typically 9600 8N1. BLE sibling uses service FF00, notify FF01,
-write FF02 with the same DD…77 bodies. One client at a time on BLE; UART is
-a separate physical path.
+BLE: service FF00, notify FF01, write FF02. One GATT central at a time.
+USB UART sibling is 9600 8N1 with the same DD…77 bytes (Serial/BMS/JBD).
 
 Example:
-    ./encode_jbd_uart.py basic
-    ./encode_jbd_uart.py cells
-    ./encode_jbd_uart.py hw
-    ./encode_jbd_uart.py self-test
+    ./encode_jbd.py basic
+    ./encode_jbd.py cells
+    ./encode_jbd.py hw
+    ./encode_jbd.py self-test
 """
 
 from __future__ import annotations
