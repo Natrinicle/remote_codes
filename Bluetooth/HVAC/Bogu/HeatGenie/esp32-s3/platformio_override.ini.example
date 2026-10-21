@@ -1,0 +1,4 @@
+; Copy to platformio_override.ini (gitignored). Auth must match OTA_PASSWORD in secrets.h.
+[env:s3-ota]
+upload_flags =
+  --auth=change-me-ota

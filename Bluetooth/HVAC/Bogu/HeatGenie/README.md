@@ -112,4 +112,7 @@ Status notify is 52 bytes: `AA 09 FF … F2` + 40-byte register map (temps are
 ./encode_heatgenie.py decode aa09ff…
 ```
 
+ESP32-S3 Super Mini firmware (GPIO5 TX / GPIO6 RX on one blue wire, BLE
+`HeatGenie-S3`, STA SSIDs from gitignored `secrets.h`): [`esp32-s3/README.md`](esp32-s3/README.md).
+
 Known-good auto-report start: `aa006502141ed095`.

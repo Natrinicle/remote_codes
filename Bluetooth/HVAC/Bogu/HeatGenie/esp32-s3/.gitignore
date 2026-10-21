@@ -1,0 +1,6 @@
+.pio/
+.vscode/
+secrets.h
+src/secrets.h
+platformio_override.ini
+*.bin

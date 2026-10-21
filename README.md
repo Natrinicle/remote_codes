@@ -19,8 +19,11 @@ those folders has its own README.
 | Device | Path | File | Protocol |
 |--------|------|------|----------|
 | HAPPRUN H1 projector | [Infrared/Projectors/Haprun/H1](Infrared/Projectors/Haprun/H1/) | `Haprun_H1.ir` | NEC, address `0x02` |
+| FUDONI GC888 projector | [Infrared/Projectors/Fudoni/GC888](Infrared/Projectors/Fudoni/GC888/) | `Fudoni_GC888.ir` | NECext, address `0x1608` |
 | Carrier Air V ceiling cassette | [Infrared/HVAC/Carrier/Air V](Infrared/HVAC/Carrier/Air%20V/) | `Carrier_Air_V.ir` | 36-bit pulse-distance, 38 kHz |
 | Sony UBP-X700 Ultra HD Blu-ray | [Infrared/Bluray_Players/Sony/UBP-X700](Infrared/Bluray_Players/Sony/UBP-X700/) | `Sony_UBP-X700.ir` | SIRC20 address `5A 1C` |
+| ETD-360 solar street light | [Infrared/Lights/ETD/ETD-360](Infrared/Lights/ETD/ETD-360/) | `ETD_ETD-360.ir` | NEC, address `0x00` |
+| BLS-70-25RC LED solar light bulb | [Infrared/Lights/BLS/BLS-70-25RC](Infrared/Lights/BLS/BLS-70-25RC/) | `BLS_BLS-70-25RC.ir` | NEC, address `0x80` |
 | HeatGenie parking diesel heater | [Bluetooth/HVAC/Bogu/HeatGenie](Bluetooth/HVAC/Bogu/HeatGenie/) | `encode_heatgenie.py` | BLE 181A / 3A00-3A01, AA+CRC16 |
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
 | SRNE hybrid USB UART | [Serial/Inverters/SRNE](Serial/Inverters/SRNE/) | `encode_srne.py` | Modbus RTU FC3/FC6, 9600 8N1 |
@@ -33,9 +36,13 @@ those folders has its own README.
 Infrared/
   Bluray_Players/Sony/UBP-X700/
   HVAC/Carrier/Air V/
+  Lights/BLS/BLS-70-25RC/
+  Lights/ETD/ETD-360/
+  Projectors/Fudoni/GC888/
   Projectors/Haprun/H1/
 Bluetooth/
   HVAC/Bogu/HeatGenie/
+  HVAC/Bogu/HeatGenie/esp32-s3/
   BMS/JBD/
   Inverters/Luxpower/
 Network/
@@ -67,7 +74,7 @@ LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58
 
 Serial: same tree under `Serial/` for USB UART, USB HID, RS485, and CAN. Helpers print payloads; they do not open `/dev/ttyUSB0` or `/dev/hidraw0`. A CH340 stick is not automatically Voltronic. BLE GATT (including JBD `FF00`) lives under `Bluetooth/`.
 
-Photos in this repo are deskewed, background-removed, and cleaned of dirt. Button artwork is not redrawn.
+Photos in this repo are deskewed, background-removed, and cleaned of dirt. Button artwork is not redrawn. Included user-manual pages ship as `manual-1.jpg`, `manual-2.jpg`, … (local rembg BiRefNet, original pixels).
 
 ## Agent toolkit
 
@@ -85,8 +92,11 @@ rules load when the repo is opened in Claude Code or Grok.
 | `skill-composition` | [`.claude/rules/skill-composition.md`](.claude/rules/skill-composition.md) |
 
 Use the skills for new captures: photos (cutout onto white for dense I/O; keep
-camera files as `*.ignore.jpg`), FCC plates, README tree, raw IR decode, encode
-scripts. After a folder move, run
+camera files as `*.ignore.jpg`), included manuals (`classify_shots.py` then
+`cutout_manual.py`), FCC plates, README tree, raw IR decode, encode scripts.
+If Flipper saved `type: raw`, run
+`python3 .claude/skills/flipper-ir-library/scripts/correct_parsed_ir.py UNIT.ir --write`
+before HVAC decode. After a folder move, run
 `python3 .claude/skills/flipper-ir-library/scripts/check_readme_links.py`.
 
 Edits to a skill or rule are copied into this toolkit in the same turn; you

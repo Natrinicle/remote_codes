@@ -1,4 +1,4 @@
-# Camera originals — often GPS EXIF. Keep curated remote.jpg / unit*.jpg / label.jpg.
+# Camera originals — often GPS EXIF. Keep curated remote.jpg / unit*.jpg / label.jpg / manual-*.jpg.
 IMG*.jpg
 IMG*.jpeg
 IMG*.heic
@@ -106,3 +106,6 @@ desktop.ini
 # Logs
 *.log
 *.log.*
+
+# PlatformIO build cache (HeatGenie-S3 and any later firmware)
+.pio/

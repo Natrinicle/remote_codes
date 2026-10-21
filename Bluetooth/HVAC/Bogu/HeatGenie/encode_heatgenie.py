@@ -74,7 +74,9 @@ RUN_MODE = {
 
 # errorCode at status offset 20. E-10 locks during cooldown; wait for fan 0, then retry.
 ERROR_CODES = {
-    512: "E-10",
+    128: "E-08",  # flame-out while running (bit 7); live 2026-10-02 after blower off
+    256: "E-09",  # seen as a brief flicker during delayed glow
+    512: "E-10",  # two failed ignition drips (bit 9)
 }
 
 
@@ -136,6 +138,10 @@ def set_target_temp_c(deg_c: int) -> bytes:
 
 
 def set_target_gear(gear: int) -> bytes:
+    """Manual gear 1–10. Ignition drip is an ECU table (live 1.2 Hz at 2 kW);
+    ~0.9 Hz is the usual 22 µL / ~7000 ft Low. This command is the remaining
+    rate lever; APK has no Hz write.
+    """
     if not 1 <= gear <= 10:
         raise ValueError("gear 1-10")
     return cmd_frame(DB0_DN_SHORT_PARA, SHORT_TARGET_GEAR, 0, gear)
@@ -324,6 +330,12 @@ def self_test() -> None:
     assert decode_advanced_byte(packed)["volt"] == "12V"
     assert set_target_temp_f(70).hex() == "aa00660101463562"
     assert set_run_mode_auto().hex() == "aa00660000001961"
+    assert (
+        cmd_frame(DB0_DN_SHORT_PARA, SHORT_RUN_MODE, 0, RUN_MODE_MAN).hex()
+        == "aa00660000010940"
+    )
+    assert set_target_gear(1).hex() == "aa00660200016720"
+    assert set_target_gear(10).hex() == "aa006602000ad64b"
 
 
 def main() -> int:
@@ -356,6 +368,9 @@ def main() -> int:
     sub.add_parser("para-addr", help="GET_REG_ADDR paraInfoArea")
     sub.add_parser("para-val", help="GET_REG_VAL paraInfoArea")
     sub.add_parser("mode-auto", help="constant-temp / 恒温 mode")
+    sub.add_parser("mode-man", help="manual gear mode")
+    p_gear = sub.add_parser("gear", help="manual gear 1-10 (ignition Hz is ECU table)")
+    p_gear.add_argument("n", type=int)
     p_tf = sub.add_parser("temp-f", help="set aim temp in °F (50-104)")
     p_tf.add_argument("deg", type=int)
     p_decp = sub.add_parser("decode-para", help="decode a 0xF3 para dump")
@@ -387,6 +402,10 @@ def main() -> int:
         print(_hex(get_para_val()))
     elif args.cmd == "mode-auto":
         print(_hex(set_run_mode_auto()))
+    elif args.cmd == "mode-man":
+        print(_hex(cmd_frame(DB0_DN_SHORT_PARA, SHORT_RUN_MODE, 0, RUN_MODE_MAN)))
+    elif args.cmd == "gear":
+        print(_hex(set_target_gear(args.n)))
     elif args.cmd == "temp-f":
         print(_hex(set_target_temp_f(args.deg)))
     elif args.cmd == "decode-para":

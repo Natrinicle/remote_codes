@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: Power
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 87 78 00 00
+# 
+name: Input
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: DC 23 00 00
+# 
+name: Up
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 84 7B 00 00
+# 
+name: Down
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 8D 72 00 00
+# 
+name: Left
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: BB 44 00 00
+# 
+name: Right
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 8E 71 00 00
+# 
+name: Ok
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: B2 4D 00 00
+# 
+name: Menu
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 8A 75 00 00
+# 
+name: Home
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 4F B0 00 00
+# 
+name: Back
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 8B 74 00 00
+# 
+name: Vol+
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 89 76 00 00
+# 
+name: Vol-
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: B5 4A 00 00
+# 
+name: Mouse
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 41 BE 00 00
+# 
+name: Mute
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 5B A4 00 00
+# 
+name: Focus+
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: 45 BA 00 00
+# 
+name: Focus-
+type: parsed
+protocol: NECext
+address: 08 16 00 00
+command: F5 0A 00 00

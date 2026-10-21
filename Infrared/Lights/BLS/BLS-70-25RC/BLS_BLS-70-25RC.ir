@@ -1,0 +1,75 @@
+Filetype: IR signals file
+Version: 1
+#
+# BLS-70-25RC LED solar light bulb (split panel + hanging bulb)
+# Protocol: NEC, address 0x80 (Flipper: 80 00 00 00)
+# Captured on Flipper Zero, 2026-09-05
+# Sheet names in comments; Flipper name: is the key as learned
+#
+# On/Off/2h/10h parsed as NEC. Mode/Auto/30m/5h were saved as raw NEC
+# repeat bursts only (~9.1 ms + ~2.25 ms + ~560 µs, no command payload).
+# Do not invent command bytes for those four keys.
+#
+# ON — Light on
+name: On
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 01 00 00 00
+#
+# OFF — Light off
+name: Off
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 03 00 00 00
+#
+# MODE — cycle highlight / medium / low / SOS / light-sensor
+# Raw: NEC repeat frames only; re-learn for a parsed command
+# correct_parsed_ir: NEC repeat only (no command payload). sibling NEC addr 80 00 00 00. Re-learn for a parsed command.
+name: Mode
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 1073705499 2243 578 96079 9170 2242 579 96078 9170 2243 577 96079 9169 2243 578 96078 9171 2243 578 96078 9171 2243 578 96078 9170 2243 578 96081 9169 2245 576 96082 9143 2270 551 96111 9170 2243 578 96085 9170 2243 578 96086 9142 2271 598 96068 9168 2247 601 96067 9169 2249 600
+#
+# AUTO — Light sensor mode
+# Raw: NEC repeat frames only; re-learn for a parsed command
+# correct_parsed_ir: NEC repeat only (no command payload). sibling NEC addr 80 00 00 00. Re-learn for a parsed command.
+name: Auto
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9140 2270 574 96067 9163 2247 599 96045 9163 2246 600 96043 9164 2246 601
+#
+# 30min timer
+# Raw: NEC repeat frames only; re-learn for a parsed command
+# correct_parsed_ir: NEC repeat only (no command payload). sibling NEC addr 80 00 00 00. Re-learn for a parsed command.
+name: 30m
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9147 2247 598 96017 9149 2245 600
+#
+# 2h timer
+name: 2h
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 1F 00 00 00
+#
+# 5h timer
+# Raw: NEC repeat frames only; re-learn for a parsed command
+# correct_parsed_ir: NEC repeat only (no command payload). sibling NEC addr 80 00 00 00. Re-learn for a parsed command.
+name: 5h
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9125 2268 549 96031 9124 2268 574 96002 9159 2246 598 95961 9122 2244 600
+#
+# 10h timer
+name: 10h
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 09 00 00 00

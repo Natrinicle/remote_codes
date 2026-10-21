@@ -1,0 +1,91 @@
+Filetype: IR signals file
+Version: 1
+#
+# ETD-360 solar street light (split panel + lamp)
+# Protocol: NEC, address 0x00 (Flipper: 00 00 00 00)
+# Captured on Flipper Zero, 2026-10-18
+# Sheet names in comments; Flipper name: is the key as learned
+#
+# Red (top red key)
+name: Red
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 45 00 00 00
+#
+# ON — Light on
+name: On
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 46 00 00 00
+#
+# OFF — Light off
+name: Off
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 44 00 00 00
+#
+# Top sun — Fully bright
+name: Brighter
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 43 00 00 00
+#
+# Bottom sun — Half bright
+name: Dimmer
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0D 00 00 00
+#
+# + — Brighten
+name: +
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 07 00 00 00
+#
+# - — Dim
+name: -
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 09 00 00 00
+#
+# M (center of brightness cluster; unlabeled on the sheet)
+name: M
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 08 00 00 00
+#
+# AUTO — AUTO MODE
+name: Auto
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 19 00 00 00
+#
+# 3H — 3-hour timer
+name: 3H
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 15 00 00 00
+#
+# 5H — 5-hour timer
+name: 5H
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 16 00 00 00
+#
+# 8H — 8-hour timer
+name: 8H
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 18 00 00 00
