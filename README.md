@@ -1,19 +1,20 @@
 # remote_codes
 
-Infrared remotes captured with a Flipper Zero, plus BLE and LAN protocol
-notes for devices that do not speak IR.
+Infrared remotes captured with a Flipper Zero, plus BLE, LAN, and USB
+serial protocol notes for devices that do not speak IR.
 
 Copy a `.ir` file onto the Flipper SD card under `infrared/` (or a subfolder) and open it from **Infrared → Saved Remotes**. Parsed NEC entries work on stock firmware. The Carrier Air V file is raw 38 kHz because that remote sends a 36-bit state frame, not a one-shot NEC command.
 
 BLE units are under [Bluetooth](Bluetooth/). LAN collectors and inverter
-tunnels are under [Network](Network/). Those trees are not Flipper files;
-use the unit `encode_*.py`.
+tunnels are under [Network](Network/). USB UART, USB HID, and RS485
+inverter/BMS families are under [Serial](Serial/). Those trees are not
+Flipper files; use the unit `encode_*.py`.
 
 ## Catalog
 
-Browse from [Infrared](Infrared/), [Bluetooth](Bluetooth/), or
-[Network](Network/): type → brand → model. Each of those folders has its
-own README.
+Browse from [Infrared](Infrared/), [Bluetooth](Bluetooth/),
+[Network](Network/), or [Serial](Serial/): type → brand → model. Each of
+those folders has its own README.
 
 | Device | Path | File | Protocol |
 |--------|------|------|----------|
@@ -22,6 +23,9 @@ own README.
 | Sony UBP-X700 Ultra HD Blu-ray | [Infrared/Bluray_Players/Sony/UBP-X700](Infrared/Bluray_Players/Sony/UBP-X700/) | `Sony_UBP-X700.ir` | SIRC20 address `5A 1C` |
 | HeatGenie parking diesel heater | [Bluetooth/HVAC/Bogu/HeatGenie](Bluetooth/HVAC/Bogu/HeatGenie/) | `encode_heatgenie.py` | BLE 181A / 3A00-3A01, AA+CRC16 |
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
+| SRNE hybrid USB UART | [Serial/Inverters/SRNE](Serial/Inverters/SRNE/) | `encode_srne.py` | Modbus RTU FC3/FC6, 9600 8N1 |
+| Voltronic Axpert / InfiniSolar | [Serial/Inverters/Voltronic](Serial/Inverters/Voltronic/) | `encode_voltronic.py` | ASCII QPIGS HID or UART |
+| JBD / Xiaoxiang BMS UART | [Serial/BMS/JBD](Serial/BMS/JBD/) | `encode_jbd_uart.py` | `DD A5` / `77`, 9600 8N1 |
 
 ## Layout
 
@@ -34,6 +38,10 @@ Bluetooth/
   HVAC/Bogu/HeatGenie/
 Network/
   Inverters/EyeBond/SmartESS/
+Serial/
+  Inverters/SRNE/
+  Inverters/Voltronic/
+  BMS/JBD/
 ```
 
 `Device type / brand / model`, same idea as Flipper-IRDB. Button names on ACs encode the full state (`Cool_75_Auto`) because those remotes do not send "temperature up" as an independent command. If a folder moves, every README that linked to it has to move with it.
@@ -50,6 +58,8 @@ IR:
 BLE: same type/brand/model tree under `Bluetooth/`. Put framing in `encode_*.py` and the unit README. Do not commit APKs. Recover unknown framing with **reverse-engineering-protocols**.
 
 LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58899 or listen on TCP 8899. Do not commit APKs, collector serials, or site IPs. Do not port-forward those ports.
+
+Serial: same tree under `Serial/`. Helpers print USB UART / HID / RS485 payloads; they do not open `/dev/ttyUSB0` or `/dev/hidraw0`. A CH340 stick is not automatically Voltronic.
 
 Photos in this repo are deskewed, background-removed, and cleaned of dirt. Button artwork is not redrawn.
 

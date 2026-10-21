@@ -20,7 +20,7 @@ send packets.
 | UDP | **58899** ASCII hijack |
 | TCP | **8899** EyeBond session (collector **initiates**) |
 | Inner UART | **9600-8-1-0** on this family |
-| Proven inner protocol | **SRNE Modbus RTU FC3** inside EyeBond FC=4 |
+| Proven inner protocol | **SRNE Modbus RTU FC3** inside EyeBond FC=4. Unwrapped UART: [Serial/Inverters/SRNE](../../../../Serial/Inverters/SRNE/) |
 
 Other EyeBond tunnels exist (PI17/PI18 ASCII, SMG Modbus). PI17 `GS` / PI30
 `QPIGS` returned empty FC=4 on the collector this map was taken from. Do not
@@ -138,8 +138,9 @@ probed inverter. Do not treat that as PI17.
 ./encode_smartess.py self-test
 ```
 
-SRNE FC6/16 writes are not mapped. Serial `SET` (PI17-style) is ignored on
-this dongle. No HTTP write surface.
+SRNE FC6/16 writes are not mapped on this EyeBond path. Direct USB UART FC6
+is [Serial/Inverters/SRNE](../../../../Serial/Inverters/SRNE/) (print-only).
+Serial `SET` (PI17-style) is ignored on this dongle. No HTTP write surface.
 
 ## Integrations (same UDP/TCP)
 
