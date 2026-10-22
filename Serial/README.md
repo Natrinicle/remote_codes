@@ -27,6 +27,10 @@ the inverter answers QPIGS.
 | LXP / SNA / GridBoss on BLE | Luxpower BLE | [Bluetooth/Inverters/Luxpower](../Bluetooth/Inverters/Luxpower/) |
 | `DD A5 03` / Xiaoxiang on UART | JBD UART | [BMS/JBD](BMS/JBD/) |
 | `DD A5 03` / Xiaoxiang / GATT `FF00` | JBD BLE | [Bluetooth/BMS/JBD](../Bluetooth/BMS/JBD/) |
+| `55 55` XOR bcc, B1 thermal, GATT `e7810a71` | NIIMBOT BLE | [Bluetooth/Printers/NIIMBOT/B1](../Bluetooth/Printers/NIIMBOT/B1/) |
+| Type-C CDC, same `55 55` frames | NIIMBOT USB | [Printers/NIIMBOT/B1](Printers/NIIMBOT/B1/) |
+| `SIZE` / `GAP` / `BITMAP` TSPL, GATT `0000ff00` | Nelko P21 BLE | [Bluetooth/Printers/Nelko/P21](../Bluetooth/Printers/Nelko/P21/) |
+| `1F 11` / `GS v 0` (`1D 76 30`), SPP `00001101` | Aimotech D30 | [Bluetooth/Printers/Aimotech/D30](../Bluetooth/Printers/Aimotech/D30/) |
 | `pwr` / `bat` / `help` RS485 shell | Pylontech | [BMS/Pylontech](BMS/Pylontech/) |
 | VE.Direct `Checksum` / `:7` | Victron | [BMS/Victron](BMS/Victron/) |
 | FC3 start 37 count 17 on RS485 | Voltronic LIB BMS | [BMS/VoltronicLib](BMS/VoltronicLib/) |
@@ -47,3 +51,4 @@ the inverter answers QPIGS.
 |------|------|
 | Inverters | [Inverters](Inverters/) |
 | BMS | [BMS](BMS/) |
+| Printers | [Printers](Printers/) |

@@ -1,12 +1,16 @@
 name: remote_codes
-version: "0.3.0"
+version: "0.3.1"
 description: >
   Flipper Zero IR library plus BLE, LAN, and USB serial protocol notes: pack
   layout, photo cleanup (including dense rear I/O cutouts and rembg BiRefNet
   manual pages), FCC plates, README tree, raw-IR decode, GATT framing helpers
   (HeatGenie E-10 waits for cooldown, then unique-random vent/ON;
   encode_heatgenie.py vent/clear/gear; HeatGenie-S3 UART Afterburner 0x76/0x78;
-  JBD encode_jbd.py FF00), EyeBond/SmartESS local hijack (UDP 58899 / TCP 8899,
+  JBD encode_jbd.py FF00; NIIMBOT B1 encode_niimbot.py 55 55 XOR on
+  e7810a71/bef8d6c9; Nelko P21 encode_nelko.py TSPL on 0000ff00/ff02;
+  Aimotech D30 encode_aimotech.py GS v 0 on SPP 00001101; label-bridge
+  IPP/AirPrint client for those three), EyeBond/SmartESS
+  local hijack (UDP 58899 / TCP 8899,
   SRNE Modbus RTU; encode_smartess.py), and USB UART/HID/RS485/CAN inverter+BMS
   (SRNE encode_srne.py, Voltronic QPIGS). Infrared catalog includes ETD-360,
   BLS-70-25RC, and FUDONI GC888. Trees split by connection: Bluetooth/ vs

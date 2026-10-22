@@ -29,6 +29,10 @@ those folders has its own README.
 | SRNE hybrid USB UART | [Serial/Inverters/SRNE](Serial/Inverters/SRNE/) | `encode_srne.py` | Modbus RTU FC3/FC6, 9600 8N1 |
 | Voltronic Axpert / InfiniSolar | [Serial/Inverters/Voltronic](Serial/Inverters/Voltronic/) | `encode_voltronic.py` | ASCII QPIGS HID or UART |
 | JBD / Xiaoxiang BMS | [Bluetooth/BMS/JBD](Bluetooth/BMS/JBD/) | `encode_jbd.py` | BLE GATT `FF00` / `FF01` / `FF02`, `DD A5` / `77` |
+| NIIMBOT B1 label printer | [Bluetooth/Printers/NIIMBOT/B1](Bluetooth/Printers/NIIMBOT/B1/) | `encode_niimbot.py` | BLE GATT `e7810a71` / `bef8d6c9`, `55 55` XOR |
+| Nelko P21 label printer | [Bluetooth/Printers/Nelko/P21](Bluetooth/Printers/Nelko/P21/) | `encode_nelko.py` | BLE GATT `0000ff00` / `ff02`, TSPL ASCII |
+| Aimotech D30 label printer | [Bluetooth/Printers/Aimotech/D30](Bluetooth/Printers/Aimotech/D30/) | `encode_aimotech.py` | Classic SPP `00001101`, ESC/POS `GS v 0` |
+| Label print bridge (Windows/Linux/phones) | [Bluetooth/Printers/label-bridge](Bluetooth/Printers/label-bridge/) | `labelbridge.py` | IPP/AirPrint + BLE/SPP client |
 
 ## Layout
 
@@ -45,6 +49,10 @@ Bluetooth/
   HVAC/Bogu/HeatGenie/esp32-s3/
   BMS/JBD/
   Inverters/Luxpower/
+  Printers/NIIMBOT/B1/
+  Printers/Nelko/P21/
+  Printers/Aimotech/D30/
+  Printers/label-bridge/
 Network/
   Inverters/EyeBond/SmartESS/
   Inverters/GoodWe/
@@ -55,6 +63,7 @@ Serial/
   Inverters/GoodWe/
   Inverters/Luxpower/
   BMS/JBD/
+  Printers/NIIMBOT/B1/
 ```
 
 `Device type / brand / model`, same idea as Flipper-IRDB. Button names on ACs encode the full state (`Cool_75_Auto`) because those remotes do not send "temperature up" as an independent command. If a folder moves, every README that linked to it has to move with it.

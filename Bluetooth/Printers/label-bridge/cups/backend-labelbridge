@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# CUPS backend. Device URI: labelbridge://MODEL/ADDRESS
+# MODEL is niimbot-b1, nelko-p21, or aimotech-d30.
+set -euo pipefail
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+if [[ $# -eq 0 ]]; then
+  echo 'direct labelbridge://nelko-p21/auto "Nelko P21" "Nelko P21" "MFG:Nelko;MDL:P21;"'
+  echo 'direct labelbridge://niimbot-b1/auto "NIIMBOT B1" "NIIMBOT B1" "MFG:NIIMBOT;MDL:B1;"'
+  echo 'direct labelbridge://aimotech-d30/auto "Aimotech D30" "Aimotech D30" "MFG:Aimotech;MDL:D30;"'
+  exit 0
+fi
+uri="${DEVICE_URI:-}"
+rest="${uri#labelbridge://}"
+model="${rest%%/*}"
+address="${rest#*/}"
+if [[ -z "${model}" || -z "${address}" || "${address}" == "auto" ]]; then
+  echo "labelbridge: DEVICE_URI needs model and MAC or COM, e.g. labelbridge://nelko-p21/AA:BB:CC:DD:EE:FF" >&2
+  exit 1
+fi
+tmp="$(mktemp)"
+trap 'rm -f "${tmp}"' EXIT
+cat >"${tmp}"
+args=(python3 "${HERE}/labelbridge.py" print "${tmp}" --model "${model}" --fit contain)
+if [[ "${address}" == COM* || "${address}" == com* || "${address}" == /dev/* ]]; then
+  args+=(--spp-port "${address}")
+else
+  args+=(--address "${address}")
+fi
+exec "${args[@]}"

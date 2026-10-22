@@ -1,0 +1,5 @@
+bleak>=0.22.0
+pillow>=10.0.0
+zeroconf>=0.131.0
+pyserial>=3.5
+pypdfium2>=4.30.0
