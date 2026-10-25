@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+"""CUPS backend: nelko://MAC → RFCOMM channel 1.
+
+Discovery (no args) lists live BlueZ devices whose name looks like a
+Nelko TSPL printer. A job reads TSPL from the filter on stdin (or
+argv[6]) and writes it to the printer. Helpers in encode_nelko.py stay
+payload-only; this backend is the socket.
+
+Install mode 0700 owned by root so cupsd runs it as root. LPR users
+only submit jobs. Match BLE name P21. Other 0000ff00 devices (JBD
+packs) must not receive TSPL. CONFIG? is required before PRINT.
+"""
+
+from __future__ import annotations
+
+import os
+import socket
+import sys
+import time
+from pathlib import Path
+
+CHANNEL = 1
+STATUS = {
+    0x00: "READY",
+    0x01: "LID_OPEN",
+    0x02: "FEEDING",
+    0x03: "PAPER_ERROR",
+    0x04: "NO_PAPER",
+    0x10: "PAUSED",
+    0x20: "BUSY",
+    0x24: "OUT_OF_PAPER",
+    0x30: "LOW_BATTERY",
+    0x80: "OVERHEATED",
+    0x90: "NO_POWER",
+}
+
+
+def _load_nelko_bt():
+    here = Path(__file__).resolve().parent
+    for path in (here, Path("/usr/share/printer-driver-nelko")):
+        if (path / "nelko_bt.py").is_file():
+            sys.path.insert(0, str(path))
+            break
+    import nelko_bt
+
+    return nelko_bt
+
+
+nelko_bt = _load_nelko_bt()
+
+
+def log(msg: str) -> None:
+    print(f"nelko: {msg}", file=sys.stderr, flush=True)
+
+
+def discover() -> int:
+    for line in nelko_bt.discover_lines():
+        print(line)
+    return 0
+
+
+def recv_line(sock: socket.socket, timeout: float = 2.0) -> bytes:
+    sock.settimeout(timeout)
+    buf = bytearray()
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            chunk = sock.recv(1)
+        except TimeoutError:
+            break
+        if not chunk:
+            break
+        buf.extend(chunk)
+        if buf.endswith(b"\r\n"):
+            break
+    return bytes(buf)
+
+
+def recv_some(sock: socket.socket, n: int, timeout: float = 1.5) -> bytes:
+    sock.settimeout(timeout)
+    buf = bytearray()
+    deadline = time.time() + timeout
+    while len(buf) < n and time.time() < deadline:
+        try:
+            chunk = sock.recv(n - len(buf))
+        except TimeoutError:
+            break
+        if not chunk:
+            break
+        buf.extend(chunk)
+    return bytes(buf)
+
+
+def read_job(argv: list[str]) -> bytes:
+    if len(argv) >= 7 and argv[6]:
+        with open(argv[6], "rb") as handle:
+            return handle.read()
+    return sys.stdin.buffer.read()
+
+
+def send_job(address: str, job: bytes) -> None:
+    if (
+        job[:8] == b"\x89PNG\r\n\x1a\n"
+        or job[:4] == b"%PDF"
+        or job[:4]
+        in (
+            b"RaS2",
+            b"RaS3",
+            b"RaSt",
+        )
+    ):
+        raise RuntimeError(
+            "got raster/PDF/PNG; install Nelko_P21.ppd so rastertonelko runs"
+        )
+    if b"BITMAP" not in job or b"PRINT" not in job:
+        raise RuntimeError("stdin is not a TSPL BITMAP job")
+    sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+    sock.settimeout(15)
+    try:
+        sock.connect((address, CHANNEL))
+        time.sleep(0.3)
+        sock.sendall(b"CONFIG?\r\n")
+        cfg = recv_line(sock)
+        if not cfg.startswith(b"CONFIG"):
+            raise RuntimeError(
+                f"CONFIG? got {cfg!r}; refusing (not a Nelko TSPL printer?)"
+            )
+        sock.sendall(b"\x1b!?\r\n")
+        st = recv_some(sock, 1, 1.5)
+        st_byte = st[0] if st else None
+        name = STATUS.get(st_byte, "unknown") if st_byte is not None else "empty"
+        log(f"status {st.hex() if st else 'empty'} {name}")
+        if st_byte in (0x01, 0x03, 0x04, 0x24, 0x80, 0x90):
+            raise RuntimeError(f"printer not ready: {name}")
+        sock.sendall(job)
+        time.sleep(2.0)
+        recv_some(sock, 32, 1.0)
+    finally:
+        sock.close()
+
+
+def self_test() -> None:
+    nelko_bt.self_test()
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = sys.argv if argv is None else argv
+    if len(args) == 1:
+        return discover()
+    if len(args) >= 2 and args[1] == "self-test":
+        self_test()
+        print("ok")
+        return 0
+    try:
+        address = nelko_bt.parse_uri(os.environ.get("DEVICE_URI", ""))
+        job = read_job(args)
+        if not job:
+            raise RuntimeError("empty job")
+        log(f"RFCOMM {address} ch{CHANNEL} {len(job)} B")
+        send_job(address, job)
+    except (OSError, RuntimeError, ValueError) as exc:
+        log(str(exc))
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

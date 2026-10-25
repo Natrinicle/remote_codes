@@ -1,0 +1,18 @@
+Package: printer-driver-nelko
+Source: printer-driver-nelko
+Version: 0.3.3
+Section: text
+Priority: optional
+Architecture: all
+Depends: cups, python3, python3-pil
+Recommends: bluez, poppler-utils
+Suggests: cups-bsd, system-config-printer
+Maintainer: remote_codes pack <remote-codes@example.com>
+Description: CUPS driver for Nelko P21 Bluetooth label printers
+ Userspace CUPS backend (nelko://), filter (rastertonelko), and PPD/drv
+ for Nelko P21 TSPL2 over RFCOMM channel 1.
+ .
+ Install this package as root once. An lpadmin user then creates a
+ queue. Users allowed by the CUPS print policy (lp/lpr on Debian) print
+ without root. The backend is mode 0700 and runs as root so job
+ submitters do not need the bluetooth group.

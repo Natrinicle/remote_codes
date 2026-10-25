@@ -30,8 +30,8 @@ those folders has its own README.
 | Voltronic Axpert / InfiniSolar | [Serial/Inverters/Voltronic](Serial/Inverters/Voltronic/) | `encode_voltronic.py` | ASCII QPIGS HID or UART |
 | JBD / Xiaoxiang BMS | [Bluetooth/BMS/JBD](Bluetooth/BMS/JBD/) | `encode_jbd.py` | BLE GATT `FF00` / `FF01` / `FF02`, `DD A5` / `77` |
 | NIIMBOT B1 label printer | [Bluetooth/Printers/NIIMBOT/B1](Bluetooth/Printers/NIIMBOT/B1/) | `encode_niimbot.py` | BLE GATT `e7810a71` / `bef8d6c9`, `55 55` XOR |
-| Nelko P21 label printer | [Bluetooth/Printers/Nelko/P21](Bluetooth/Printers/Nelko/P21/) | `encode_nelko.py` | BLE GATT `0000ff00` / `ff02`, TSPL ASCII |
-| Aimotech D30 label printer | [Bluetooth/Printers/Aimotech/D30](Bluetooth/Printers/Aimotech/D30/) | `encode_aimotech.py` | Classic SPP `00001101`, ESC/POS `GS v 0` |
+| Nelko P21 label printer | [Bluetooth/Printers/Nelko/P21](Bluetooth/Printers/Nelko/P21/) | `encode_nelko.py` | RFCOMM ch1 TSPL2 (GATT `ff02` same bytes); CUPS [printer-driver-nelko](Bluetooth/Printers/Nelko/P21/cups/) |
+| Aimotech D30 label printer | [Bluetooth/Printers/Aimotech/D30](Bluetooth/Printers/Aimotech/D30/) | `encode_aimotech.py` | Classic SPP `00001101`, ESC/POS `GS v 0`; CUPS [printer-driver-aimotech](Bluetooth/Printers/Aimotech/D30/cups/) |
 | Label print bridge (Windows/Linux/phones) | [Bluetooth/Printers/label-bridge](Bluetooth/Printers/label-bridge/) | `labelbridge.py` | IPP/AirPrint + BLE/SPP client |
 
 ## Layout
@@ -51,7 +51,9 @@ Bluetooth/
   Inverters/Luxpower/
   Printers/NIIMBOT/B1/
   Printers/Nelko/P21/
+  Printers/Nelko/P21/cups/
   Printers/Aimotech/D30/
+  Printers/Aimotech/D30/cups/
   Printers/label-bridge/
 Network/
   Inverters/EyeBond/SmartESS/

@@ -81,27 +81,26 @@ def build_nelko(
     bitmap: Bitmap1bpp,
     *,
     copies: int = 1,
-    density: int = 8,
+    density: int = 15,
     gap_mm: float = 5,
+    width_mm: float = 14,
+    height_mm: float = 40,
 ) -> list[bytes]:
     enc = nelko()
-    width_mm = round(bitmap.width_mm(), 1)
-    height_mm = max(1.0, round(bitmap.height_mm(), 1))
-    payload = bitmap.payload()
-    return [
-        enc.size_cmd(width_mm, height_mm),
-        enc.gap_cmd(gap_mm),
-        enc.direction_cmd(0, 0),
-        enc.density_cmd(density),
-        enc.cls_cmd(),
-        enc.bitmap_cmd(
-            payload,
-            width_bytes=bitmap.width_bytes,
-            height=bitmap.height,
-            mode=0,
-        ),
-        enc.print_cmd(copies),
-    ]
+    # pack_msb set-bit=black; live P21 wants 0-bit=black. SIZE is the
+    # paper tag (14×40), not the 12 mm printhead width.
+    payload = enc.invert_bits(bitmap.payload())
+    return enc.job_frames(
+        width_mm=width_mm,
+        height_mm=height_mm,
+        gap_mm=gap_mm,
+        density=density,
+        copies=copies,
+        payload=payload,
+        width_bytes=bitmap.width_bytes,
+        height=bitmap.height,
+        mode=1,
+    )
 
 
 def _aimotech_pixels(bitmap: Bitmap1bpp) -> list[list[int]]:
@@ -151,7 +150,12 @@ def self_test() -> None:
         px[0, y] = (0, 0, 0)
     bmp96 = raster_image(im, width_dots=96, max_height=16, fit="stretch", dither=False)
     nelko_frames = build_nelko(bmp96)
-    assert nelko_frames[0].startswith(b"SIZE ")
+    assert nelko_frames[0] == b"\r\n"
+    assert nelko_frames[1].startswith(b"SIZE 14 mm,40 mm")
+    assert nelko_frames[3] == b"DIRECTION 1,1\r\n"
+    assert nelko_frames[4] == b"DENSITY 15\r\n"
+    assert nelko_frames[6].startswith(b"BITMAP 0,0,12,8,1,")
+    assert nelko_frames[6][len(b"BITMAP 0,0,12,8,1,")] == 0x7F
     assert nelko_frames[-1] == b"PRINT 1\r\n"
     aim = build_aimotech(bmp96)
     assert aim[0] == b"\x1f\x11\x38"

@@ -1,0 +1,43 @@
+// CUPS driver source for Aimotech D30 / Print Master RFCOMM ESC/POS.
+// Installed as /usr/share/cups/drv/aimotech.drv so lpinfo -m, GNOME,
+// KDE, system-config-printer, and the CUPS web UI list "Aimotech D30".
+//
+// CC0 1.0. Brand name remains the manufacturer's.
+
+#include <font.defs>
+#include <media.defs>
+
+Manufacturer "Aimotech"
+Version "0.3.4"
+DriverType label
+Throughput 4
+ColorDevice no
+ManualCopies yes
+HWMargins 0 0 0 0
+
+Filter application/vnd.cups-raster 0 rastertoaimotech
+Filter image/png 0 rastertoaimotech
+Filter image/jpeg 0 rastertoaimotech
+Filter application/pdf 0 rastertoaimotech
+
+Font *
+
+// 12 mm printhead × 40 mm canvas, in PostScript points.
+#media "Label12x40/12 x 40 mm" 34 113
+*MediaSize Label12x40
+
+Option Resolution PickOne AnySetup 20
+  *Choice "203dpi/203 DPI" "<</HWResolution[203 203]/cupsColorSpace 0/cupsBitsPerColor 8>>setpagedevice"
+
+{
+  ModelName "D30"
+  Attribute "NickName" "" "Aimotech D30 Print Master SPP"
+  Attribute "ShortNickName" "" "Aimotech D30"
+  Attribute "Product" "" "(D30)"
+  Attribute "1284DeviceID" "" "MFG:Aimotech;MDL:D30;CMD:ESCPOS;CLS:PRINTER;"
+  Attribute "cupsSNMPSupplies" "" "False"
+  Attribute "cupsIPPSupplies" "" "False"
+  Attribute "cupsSingleFile" "" "True"
+  Attribute "DefaultColorSpace" "" "Gray"
+  PCFileName "aimotechd30.ppd"
+}

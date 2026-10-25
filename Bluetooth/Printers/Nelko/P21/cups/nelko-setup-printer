@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+"""Create a CUPS queue for a Nelko P21.
+
+Needs the lpadmin group (or root), not a per-job sudo. After the queue
+exists, anyone the CUPS print policy allows can lp/lpr.
+
+  nelko-setup-printer --list
+  nelko-setup-printer --mac 01:23:45:67:89:AB
+  nelko-setup-printer              # unique discovered P21
+"""
+
+from __future__ import annotations
+
+import argparse
+import grp
+import os
+import pwd
+import subprocess
+import sys
+from pathlib import Path
+
+DRV_MODEL = "drv:///nelko.drv/nelkop21.ppd"
+PPD_PATH = "/usr/share/ppd/nelko/Nelko_P21.ppd"
+LPADMIN = "/usr/sbin/lpadmin"
+LPINFO = "/usr/sbin/lpinfo"
+DEFAULT_NAME = "NelkoP21"
+
+
+def _load_nelko_bt():
+    here = Path(__file__).resolve().parent
+    for path in (here, Path("/usr/share/printer-driver-nelko")):
+        if (path / "nelko_bt.py").is_file():
+            sys.path.insert(0, str(path))
+            break
+    import nelko_bt
+
+    return nelko_bt
+
+
+nelko_bt = _load_nelko_bt()
+
+
+def in_lpadmin() -> bool:
+    if os.geteuid() == 0:
+        return True
+    try:
+        wanted = grp.getgrnam("lpadmin").gr_gid
+    except KeyError:
+        return False
+    user = pwd.getpwuid(os.geteuid()).pw_name
+    return wanted in os.getgrouplist(user, os.getgid())
+
+
+def lpinfo_nelko() -> list[tuple[str, str]]:
+    if not Path(LPINFO).is_file():
+        return []
+    try:
+        proc = subprocess.run(
+            [LPINFO, "-v"],
+            capture_output=True,
+            text=True,
+            timeout=20,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    found: list[tuple[str, str]] = []
+    for raw in (proc.stdout or "").splitlines():
+        line = raw.strip()
+        if not line.startswith("direct nelko://"):
+            continue
+        uri = line.split(None, 2)[1]
+        try:
+            addr = nelko_bt.parse_uri(uri)
+        except ValueError:
+            continue
+        name = "P21"
+        if '"' in line:
+            bits = line.split('"')
+            if len(bits) >= 2:
+                name = bits[1].replace("Nelko ", "", 1).strip() or "P21"
+        found.append((addr, name))
+    return found
+
+
+def discover() -> list[tuple[str, str]]:
+    via_cups = lpinfo_nelko()
+    if via_cups:
+        return via_cups
+    return nelko_bt.list_bluez_devices()
+
+
+def add_queue(name: str, addr: str, *, dry_run: bool) -> int:
+    uri = f"nelko://{addr}"
+    if dry_run:
+        print(f"{LPADMIN} -p {name} -E -v {uri} -m {DRV_MODEL}")
+        return 0
+    if not in_lpadmin():
+        print(
+            "nelko-setup-printer: join the lpadmin group (or run as root) to add a queue",
+            file=sys.stderr,
+        )
+        return 4
+    if not Path(LPADMIN).is_file():
+        print("nelko-setup-printer: lpadmin missing; install cups", file=sys.stderr)
+        return 1
+    cmd = [LPADMIN, "-p", name, "-E", "-v", uri, "-m", DRV_MODEL]
+    proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if proc.returncode != 0 and Path(PPD_PATH).is_file():
+        cmd = [LPADMIN, "-p", name, "-E", "-v", uri, "-P", PPD_PATH]
+        proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if proc.returncode != 0:
+        err = (proc.stderr or proc.stdout or "").strip()
+        print(f"nelko-setup-printer: lpadmin failed: {err}", file=sys.stderr)
+        return proc.returncode or 1
+    print(f"printer {name} enabled, uri {uri}")
+    print(f"print with: lp -d {name} file.png")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Add a CUPS queue for a Nelko P21 (lpadmin group)."
+    )
+    parser.add_argument(
+        "--name", default=DEFAULT_NAME, help=f"queue name (default {DEFAULT_NAME})"
+    )
+    parser.add_argument("--mac", help="printer Bluetooth MAC (six hex octets)")
+    parser.add_argument(
+        "--list", action="store_true", help="list discovered P21-class devices"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="print lpadmin, do not change CUPS"
+    )
+    args = parser.parse_args(None if argv is None else argv[1:])
+    if not args.name.replace(".", "").replace("_", "").replace("-", "").isalnum():
+        print("nelko-setup-printer: bad queue name", file=sys.stderr)
+        return 2
+    devices = discover()
+    if args.list:
+        if not devices:
+            print("no P21-class BlueZ devices (power the printer, wait, retry)")
+            return 0
+        for addr, name in devices:
+            print(f"nelko://{addr}  {name}")
+        return 0
+    addr = None
+    if args.mac:
+        try:
+            addr = nelko_bt.parse_uri(f"nelko://{args.mac}")
+        except ValueError as exc:
+            print(f"nelko-setup-printer: {exc}", file=sys.stderr)
+            return 2
+    elif len(devices) == 1:
+        addr = devices[0][0]
+        print(f"using {devices[0][1]} {addr}", file=sys.stderr)
+    elif not devices:
+        print(
+            "nelko-setup-printer: no P21 found; pass --mac or power the printer",
+            file=sys.stderr,
+        )
+        return 3
+    else:
+        print("nelko-setup-printer: several devices, pass --mac:", file=sys.stderr)
+        for dev_addr, name in devices:
+            print(f"  nelko://{dev_addr}  {name}", file=sys.stderr)
+        return 3
+    return add_queue(args.name, addr, dry_run=args.dry_run)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

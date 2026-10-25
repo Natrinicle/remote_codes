@@ -15,12 +15,13 @@ the one that opens BLE or RFCOMM.
 | Printer | Transport | Packed encoder |
 |---------|-----------|----------------|
 | [NIIMBOT B1](../NIIMBOT/B1/) | BLE GATT `e7810a71` / `bef8d6c9` | `encode_niimbot.py` |
-| [Nelko P21](../Nelko/P21/) | BLE GATT `0000ff00` / `ff02` | `encode_nelko.py` |
+| [Nelko P21](../Nelko/P21/) | RFCOMM ch1 TSPL2 (GATT `ff02` same bytes) | `encode_nelko.py` |
 | [Aimotech D30](../Aimotech/D30/) | Classic SPP `00001101` | `encode_aimotech.py` |
 
-Frames are recovered from the official apps. Live print on a unit is
-**unproven in the pack session** until someone runs `print` against a
-powered printer.
+Nelko P21 live SPP print is **confirmed** (RFCOMM ch1, 14×40 mm,
+DIRECTION 1,1, BITMAP mode 1, 0-bit black). NIIMBOT and Aimotech frames
+are still unproven on a live unit until someone runs `print` against a
+powered printer. Native CUPS for P21 is [Nelko/P21/cups](../Nelko/P21/cups/).
 
 ## What each OS actually uses
 
@@ -71,11 +72,17 @@ python3 labelbridge.py scan
 python3 labelbridge.py serve --model niimbot-b1 --address AA:BB:CC:DD:EE:FF
 ```
 
-CUPS (as root), URI includes the Bluetooth address:
+P21 CUPS driver (package `printer-driver-nelko`):
+[Nelko/P21/cups](../Nelko/P21/cups/). This `labelbridge` backend is the
+IPP-bridge fallback. When copied to `/usr/lib/cups/backend/`, set
+`LABELBRIDGE_HOME` to the folder that contains `labelbridge.py`, or
+install that folder at `/usr/share/labelbridge`:
 
 ```
+install -d /usr/share/labelbridge
+install -m 0644 *.py /usr/share/labelbridge/
 install -m 0755 cups/backend-labelbridge /usr/lib/cups/backend/labelbridge
-lpadmin -p NelkoP21 -v labelbridge://nelko-p21/AA:BB:CC:DD:EE:FF -E
+lpadmin -p LabelBridgeP21 -v labelbridge://nelko-p21/AA:BB:CC:DD:EE:FF -E
 ```
 
 ## CLI

@@ -12,8 +12,8 @@ NIIMBOT_SERVICE = "e7810a71-73ae-499d-8c15-faa9aef0c3f2"
 NIIMBOT_CHAR = "bef8d6c9-9c21-4c9e-b632-bd58c1009f9f"
 NELKO_SERVICE = "0000ff00-0000-1000-8000-00805f9b34fb"
 NELKO_WRITE = "0000ff02-0000-1000-8000-00805f9b34fb"
-NELKO_NOTIFY = "0000ff03-0000-1000-8000-00805f9b34fb"
-NELKO_READ = "0000ff01-0000-1000-8000-00805f9b34fb"
+# Live P21: ff01 answers TSPL/status; ff03 is credit flow-control (01 NN / 02 LL LL).
+NELKO_NOTIFY = "0000ff01-0000-1000-8000-00805f9b34fb"
 SPP_UUID = "00001101-0000-1000-8000-00805f9b34fb"
 
 
@@ -63,7 +63,7 @@ PROFILES: dict[str, Profile] = {
         title="Nelko P21",
         make="Nelko",
         model="P21",
-        transport="ble-gatt",
+        transport="spp",
         dpi=203,
         width_dots=96,
         default_height_dots=320,
@@ -72,8 +72,8 @@ PROFILES: dict[str, Profile] = {
         service=NELKO_SERVICE,
         write_char=NELKO_WRITE,
         notify_char=NELKO_NOTIFY,
-        pace_s=0.008,
-        bundle=480,
+        pace_s=0.0,
+        bundle=1024,
         mtu=512,
         media="oe_label_0.47x1.57in",
     ),

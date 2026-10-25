@@ -43,6 +43,13 @@ id_ed25519*
 *credentials*.json
 auth.json
 
+# CUPS driver package build (printer-driver-nelko, printer-driver-aimotech)
+*.deb
+*.rpm
+.deb-root/
+.rpm-root/
+.check-root/
+
 # Python / encode helpers
 __pycache__/
 *.py[cod]

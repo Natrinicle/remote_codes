@@ -1,0 +1,98 @@
+*PPD-Adobe: "4.3"
+*%%%% PPD file for P21 with CUPS.
+*%%%% Created by the CUPS PPD Compiler CUPS v2.4.18.
+*FormatVersion: "4.3"
+*FileVersion: "0.3.3"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "nelkop21.ppd"
+*Product: "(P21)"
+*Manufacturer: "Nelko"
+*ModelName: "Nelko P21"
+*ShortNickName: "Nelko P21"
+*NickName: "Nelko P21 RFCOMM TSPL"
+*PSVersion: "(3010.000) 0"
+*LanguageLevel: "3"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "4"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*% Driver-defined attributes...
+*1284DeviceID: "MFG:Nelko;MDL:P21;CMD:TSPL;CLS:PRINTER;"
+*cupsSNMPSupplies: False
+*cupsIPPSupplies: False
+*cupsSingleFile: True
+*cupsVersion: 2.4
+*cupsModelNumber: 0
+*cupsManualCopies: True
+*cupsFilter: "application/vnd.cups-raster 0 rastertonelko"
+*cupsFilter: "image/png 0 rastertonelko"
+*cupsFilter: "image/jpeg 0 rastertonelko"
+*cupsFilter: "application/pdf 0 rastertonelko"
+*cupsLanguages: "en"
+*OpenUI *PageSize/Media Size: PickOne
+*OrderDependency: 10 AnySetup *PageSize
+*DefaultPageSize: Label14x40
+*PageSize Label14x40/14 x 40 mm: "<</PageSize[40 113]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageSize
+*OpenUI *PageRegion/Media Size: PickOne
+*OrderDependency: 10 AnySetup *PageRegion
+*DefaultPageRegion: Label14x40
+*PageRegion Label14x40/14 x 40 mm: "<</PageSize[40 113]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+*DefaultImageableArea: Label14x40
+*ImageableArea Label14x40/14 x 40 mm: "0 0 40 113"
+*DefaultPaperDimension: Label14x40
+*PaperDimension Label14x40/14 x 40 mm: "40 113"
+*OpenUI *Resolution/Resolution: PickOne
+*OrderDependency: 20 AnySetup *Resolution
+*DefaultResolution: 203dpi
+*Resolution 203dpi/203 DPI: "<</HWResolution[203 203]/cupsColorSpace 0/cupsBitsPerColor 8>>setpagedevice"
+*CloseUI: *Resolution
+*OpenUI *NelkoDensity/Print Density: PickOne
+*OrderDependency: 30 AnySetup *NelkoDensity
+*DefaultNelkoDensity: 15
+*NelkoDensity 8/8: "<</cupsInteger0 8>>setpagedevice"
+*NelkoDensity 10/10: "<</cupsInteger0 10>>setpagedevice"
+*NelkoDensity 12/12: "<</cupsInteger0 12>>setpagedevice"
+*NelkoDensity 15/15 (dark): "<</cupsInteger0 15>>setpagedevice"
+*CloseUI: *NelkoDensity
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(1.05)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(1.05)" Standard ROM
+*Font AvantGarde-Demi: Standard "(1.05)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(1.05)" Standard ROM
+*Font Bookman-Demi: Standard "(1.05)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(1.05)" Standard ROM
+*Font Bookman-Light: Standard "(1.05)" Standard ROM
+*Font Bookman-LightItalic: Standard "(1.05)" Standard ROM
+*Font Courier: Standard "(1.05)" Standard ROM
+*Font Courier-Bold: Standard "(1.05)" Standard ROM
+*Font Courier-BoldOblique: Standard "(1.05)" Standard ROM
+*Font Courier-Oblique: Standard "(1.05)" Standard ROM
+*Font Helvetica: Standard "(1.05)" Standard ROM
+*Font Helvetica-Bold: Standard "(1.05)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(1.05)" Standard ROM
+*Font Helvetica-Oblique: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(1.05)" Standard ROM
+*Font Palatino-Bold: Standard "(1.05)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(1.05)" Standard ROM
+*Font Palatino-Italic: Standard "(1.05)" Standard ROM
+*Font Palatino-Roman: Standard "(1.05)" Standard ROM
+*Font Symbol: Special "(001.005)" Special ROM
+*Font Times-Bold: Standard "(1.05)" Standard ROM
+*Font Times-BoldItalic: Standard "(1.05)" Standard ROM
+*Font Times-Italic: Standard "(1.05)" Standard ROM
+*Font Times-Roman: Standard "(1.05)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(1.05)" Standard ROM
+*Font ZapfDingbats: Special "(001.005)" Special ROM
+*% End of nelkop21.ppd, 04196 bytes.

@@ -1,0 +1,11 @@
+printer-driver-aimotech (0.3.4) unstable; urgency=low
+
+  * CUPS driver for Aimotech D30 / Print Master RFCOMM ESC/POS GS v 0.
+  * drv + PPD so lpinfo -m, GNOME, KDE, system-config-printer, and the
+    CUPS web UI list the printer.
+  * Backend discovers live BlueZ names (D30 / Print Master / Phomemo /
+    Quin; never nelko/p21 or ogrphy/jbd).
+  * aimotech-setup-printer for the lpadmin group. lp/lpr needs no root.
+  * Handshake 1F 11 38/12/13/07 then ESC @ / GS v 0 / ESC d 23.
+
+ -- remote_codes pack <remote-codes@example.com>  Sat, 25 Oct 2026 00:00:00 +0000

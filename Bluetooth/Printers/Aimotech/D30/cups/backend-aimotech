@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""CUPS backend: aimotech://MAC → RFCOMM channel 1.
+
+Discovery (no args) lists live BlueZ devices whose name looks like an
+Aimotech / Print Master / Phomemo D30. A job reads ESC/POS from the
+filter on stdin (or argv[6]) and writes handshake then the job.
+encode_aimotech.py stays payload-only; this backend is the socket.
+
+Install mode 0700 owned by root so cupsd runs it as root. LPR users
+only submit jobs. Do not send TSPL. Do not invent FFE0. Frames are
+unproven on a live D30 this session.
+"""
+
+from __future__ import annotations
+
+import os
+import socket
+import sys
+import time
+from pathlib import Path
+
+CHANNEL = 1
+
+
+def _ensure_share_path() -> None:
+    here = Path(__file__).resolve().parent
+    for path in (here, here.parent, Path("/usr/share/printer-driver-aimotech")):
+        if path.is_dir() and str(path) not in sys.path:
+            sys.path.insert(0, str(path))
+
+
+def _load_aimotech_bt():
+    _ensure_share_path()
+    import aimotech_bt
+
+    return aimotech_bt
+
+
+def _load_encode():
+    _ensure_share_path()
+    import encode_aimotech
+
+    return encode_aimotech
+
+
+aimotech_bt = _load_aimotech_bt()
+encode_aimotech = _load_encode()
+
+
+def log(msg: str) -> None:
+    print(f"aimotech: {msg}", file=sys.stderr, flush=True)
+
+
+def discover() -> int:
+    for line in aimotech_bt.discover_lines():
+        print(line)
+    return 0
+
+
+def recv_some(sock: socket.socket, n: int, timeout: float = 1.5) -> bytes:
+    sock.settimeout(timeout)
+    buf = bytearray()
+    deadline = time.time() + timeout
+    while len(buf) < n and time.time() < deadline:
+        try:
+            chunk = sock.recv(n - len(buf))
+        except TimeoutError:
+            break
+        if not chunk:
+            break
+        buf.extend(chunk)
+    return bytes(buf)
+
+
+def read_job(argv: list[str]) -> bytes:
+    if len(argv) >= 7 and argv[6]:
+        with open(argv[6], "rb") as handle:
+            return handle.read()
+    return sys.stdin.buffer.read()
+
+
+def send_job(address: str, job: bytes) -> None:
+    if (
+        job[:8] == b"\x89PNG\r\n\x1a\n"
+        or job[:4] == b"%PDF"
+        or job[:4]
+        in (
+            b"RaS2",
+            b"RaS3",
+            b"RaSt",
+        )
+    ):
+        raise RuntimeError(
+            "got raster/PDF/PNG; install Aimotech_D30.ppd so rastertoaimotech runs"
+        )
+    if b"BITMAP" in job and b"PRINT" in job:
+        raise RuntimeError("stdin looks like TSPL; D30 wants GS v 0, not SIZE/GAP")
+    if not job.startswith(encode_aimotech.CMD_INIT):
+        raise RuntimeError("stdin is not an ESC @ / GS v 0 job")
+    if encode_aimotech.CMD_GS_V0 not in job:
+        raise RuntimeError("stdin missing GS v 0 raster")
+    sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+    sock.settimeout(15)
+    try:
+        sock.connect((address, CHANNEL))
+        time.sleep(0.3)
+        for frame in encode_aimotech.handshake_frames():
+            sock.sendall(frame)
+            time.sleep(0.05)
+            recv_some(sock, 32, 0.4)
+        time.sleep(0.2)
+        sock.sendall(job)
+        time.sleep(1.5)
+        recv_some(sock, 32, 1.0)
+    finally:
+        sock.close()
+
+
+def self_test() -> None:
+    aimotech_bt.self_test()
+    encode_aimotech.self_test()
+    empty = encode_aimotech.job_bytes(width_bytes=12, height=1)
+    assert empty.startswith(encode_aimotech.CMD_INIT)
+    assert encode_aimotech.CMD_GS_V0 in empty
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = sys.argv if argv is None else argv
+    if len(args) == 1:
+        return discover()
+    if len(args) >= 2 and args[1] == "self-test":
+        self_test()
+        print("ok")
+        return 0
+    try:
+        address = aimotech_bt.parse_uri(os.environ.get("DEVICE_URI", ""))
+        job = read_job(args)
+        if not job:
+            raise RuntimeError("empty job")
+        log(f"RFCOMM {address} ch{CHANNEL} {len(job)} B")
+        send_job(address, job)
+    except (OSError, RuntimeError, ValueError) as exc:
+        log(str(exc))
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

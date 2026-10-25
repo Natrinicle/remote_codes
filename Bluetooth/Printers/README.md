@@ -10,6 +10,6 @@ payloads is [label-bridge](label-bridge/).
 | Brand | Transport | Path |
 |-------|-----------|------|
 | NIIMBOT | BLE GATT `e7810a71` / `bef8d6c9` | [NIIMBOT](NIIMBOT/) |
-| Nelko | BLE GATT `0000ff00` / write `ff02` TSPL | [Nelko](Nelko/) |
-| Aimotech | Classic SPP `00001101`, `GS v 0` | [Aimotech](Aimotech/) |
+| Nelko | RFCOMM ch1 TSPL2 (GATT `ff02` same bytes); CUPS `printer-driver-nelko` | [Nelko](Nelko/) |
+| Aimotech | Classic SPP `00001101`, `GS v 0`; CUPS `printer-driver-aimotech` | [Aimotech](Aimotech/) |
 | (all three) | IPP / AirPrint / web upload | [label-bridge](label-bridge/) |

@@ -75,3 +75,8 @@ when `f49845p != 0`.
 ./encode_aimotech.py print-seq --width-bytes 12 --height 1
 ./encode_aimotech.py decode 1d7630000c000100000000000000000000000000
 ```
+
+CUPS: [cups/](cups/) (`printer-driver-aimotech`, URI
+`aimotech://AA:BB:CC:DD:EE:FF`, `drv:///aimotech.drv/aimotechd30.ppd`).
+Package install is root once; queue add is the `lpadmin` group;
+`lp`/`lpr` needs no root. Do not commit the built `.deb`.

@@ -1,0 +1,2 @@
+DRIVER_REGEXP='^drv:///nelko.drv/'
+GENNICKNAME_REGEXP=''

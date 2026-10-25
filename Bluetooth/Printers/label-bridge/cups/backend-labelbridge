@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
 # CUPS backend. Device URI: labelbridge://MODEL/ADDRESS
 # MODEL is niimbot-b1, nelko-p21, or aimotech-d30.
+# When this file is copied to /usr/lib/cups/backend/labelbridge, set
+# LABELBRIDGE_HOME to the folder that contains labelbridge.py (or install
+# that folder at /usr/share/labelbridge). The P21-native driver is
+# Bluetooth/Printers/Nelko/P21/cups/ (URI nelko://MAC).
 set -euo pipefail
-HERE="$(cd "$(dirname "$0")/.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [[ -n "${LABELBRIDGE_HOME:-}" && -f "${LABELBRIDGE_HOME}/labelbridge.py" ]]; then
+  HERE="${LABELBRIDGE_HOME}"
+elif [[ -f "${SCRIPT_DIR}/../labelbridge.py" ]]; then
+  HERE="$(cd "${SCRIPT_DIR}/.." && pwd)"
+elif [[ -f /usr/share/labelbridge/labelbridge.py ]]; then
+  HERE=/usr/share/labelbridge
+else
+  echo "labelbridge: labelbridge.py not found (set LABELBRIDGE_HOME)" >&2
+  exit 1
+fi
 if [[ $# -eq 0 ]]; then
   echo 'direct labelbridge://nelko-p21/auto "Nelko P21" "Nelko P21" "MFG:Nelko;MDL:P21;"'
   echo 'direct labelbridge://niimbot-b1/auto "NIIMBOT B1" "NIIMBOT B1" "MFG:NIIMBOT;MDL:B1;"'

@@ -1,0 +1,49 @@
+// CUPS driver source for Nelko P21 RFCOMM TSPL2.
+// Installed as /usr/share/cups/drv/nelko.drv so lpinfo -m, GNOME,
+// KDE, system-config-printer, and the CUPS web UI list "Nelko P21".
+//
+// CC0 1.0. Brand name remains the manufacturer's.
+
+#include <font.defs>
+#include <media.defs>
+
+Manufacturer "Nelko"
+Version "0.3.3"
+DriverType label
+Throughput 4
+ColorDevice no
+ManualCopies yes
+HWMargins 0 0 0 0
+
+Filter application/vnd.cups-raster 0 rastertonelko
+Filter image/png 0 rastertonelko
+Filter image/jpeg 0 rastertonelko
+Filter application/pdf 0 rastertonelko
+
+Font *
+
+// 14 mm × 40 mm genuine gap roll, in PostScript points.
+#media "Label14x40/14 x 40 mm" 40 113
+*MediaSize Label14x40
+
+Option Resolution PickOne AnySetup 20
+  *Choice "203dpi/203 DPI" "<</HWResolution[203 203]/cupsColorSpace 0/cupsBitsPerColor 8>>setpagedevice"
+
+Option "NelkoDensity/Print Density" PickOne AnySetup 30
+  Choice "8/8" "<</cupsInteger0 8>>setpagedevice"
+  Choice "10/10" "<</cupsInteger0 10>>setpagedevice"
+  Choice "12/12" "<</cupsInteger0 12>>setpagedevice"
+  *Choice "15/15 (dark)" "<</cupsInteger0 15>>setpagedevice"
+
+{
+  ModelName "P21"
+  Attribute "NickName" "" "Nelko P21 RFCOMM TSPL"
+  Attribute "ShortNickName" "" "Nelko P21"
+  Attribute "Product" "" "(P21)"
+  Attribute "1284DeviceID" "" "MFG:Nelko;MDL:P21;CMD:TSPL;CLS:PRINTER;"
+  Attribute "cupsSNMPSupplies" "" "False"
+  Attribute "cupsIPPSupplies" "" "False"
+  Attribute "cupsSingleFile" "" "True"
+  Attribute "DefaultColorSpace" "" "Gray"
+  PCFileName "nelkop21.ppd"
+}

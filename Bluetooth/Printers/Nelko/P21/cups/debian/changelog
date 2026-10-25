@@ -1,0 +1,9 @@
+printer-driver-nelko (0.3.3) unstable; urgency=low
+
+  * CUPS driver for Nelko P21 RFCOMM TSPL2.
+  * drv + PPD so lpinfo -m, GNOME, KDE, system-config-printer, and the
+    CUPS web UI list the printer.
+  * Backend discovers live BlueZ names (P21 family; never ogrphy/jbd).
+  * nelko-setup-printer for the lpadmin group. lp/lpr needs no root.
+
+ -- remote_codes pack <remote-codes@example.com>  Sat, 25 Oct 2026 00:00:00 +0000

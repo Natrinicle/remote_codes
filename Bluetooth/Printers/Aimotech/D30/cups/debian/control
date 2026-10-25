@@ -1,0 +1,22 @@
+Package: printer-driver-aimotech
+Source: printer-driver-aimotech
+Version: 0.3.4
+Section: text
+Priority: optional
+Architecture: all
+Depends: cups, python3, python3-pil
+Recommends: bluez, poppler-utils
+Suggests: cups-bsd, system-config-printer
+Maintainer: remote_codes pack <remote-codes@example.com>
+Description: CUPS driver for Aimotech D30 Print Master label printers
+ Userspace CUPS backend (aimotech://), filter (rastertoaimotech), and
+ PPD/drv for Aimotech / Quin / Phomemo D30 ESC/POS GS v 0 over RFCOMM
+ channel 1 (Print Master app family).
+ .
+ Install this package as root once. An lpadmin user then creates a
+ queue. Users allowed by the CUPS print policy (lp/lpr on Debian) print
+ without root. The backend is mode 0700 and runs as root so job
+ submitters do not need the bluetooth group.
+ .
+ Framing is recovered from Print Master 5.23.1. Live D30 eject is
+ unproven in this pack revision.

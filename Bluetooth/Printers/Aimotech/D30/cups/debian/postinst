@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+BACKEND=/usr/lib/cups/backend/aimotech
+if [ -e "$BACKEND" ]; then
+  chmod 0700 "$BACKEND"
+fi
+
+if [ -z "${DPKG_ROOT:-}" ] && command -v systemctl >/dev/null 2>&1; then
+  systemctl try-reload-or-restart cups.service >/dev/null 2>&1 || true
+fi
+
+exit 0

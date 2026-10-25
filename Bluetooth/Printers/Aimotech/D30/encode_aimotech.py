@@ -151,6 +151,24 @@ def print_seq_frames(
     return frames
 
 
+def job_bytes(
+    *,
+    width_bytes: int = PRINTHEAD_BYTES,
+    height: int = 1,
+    payload: bytes | None = None,
+    copies: int = 1,
+) -> bytes:
+    """Concatenated ESC @ + GS v 0 + ESC d 23 job for an RFCOMM write."""
+    return b"".join(
+        print_seq_frames(
+            width_bytes=width_bytes,
+            height=height,
+            payload=payload,
+            copies=copies,
+        )
+    )
+
+
 def self_test() -> None:
     assert _hex(init_cmd()) == VEC_INIT
     assert _hex(get_cmd(0x38)) == VEC_GET_38
@@ -168,6 +186,10 @@ def self_test() -> None:
     assert seq[0] == init_cmd()
     assert seq[1] == empty
     assert seq[2] == feed_cmd(23)
+    joined = job_bytes(width_bytes=12, height=1)
+    assert joined == init_cmd() + empty + feed_cmd(23)
+    two = job_bytes(width_bytes=12, height=1, copies=2)
+    assert two == init_cmd() + empty + feed_cmd(23) + empty + feed_cmd(23)
 
 
 def main(argv: list[str] | None = None) -> int:
