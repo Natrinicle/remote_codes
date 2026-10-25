@@ -1,5 +1,5 @@
 name: remote_codes
-version: "0.3.5"
+version: "0.3.6"
 description: >
   Flipper Zero IR library plus BLE, LAN, and USB serial protocol notes: pack
   layout, photo cleanup (including dense rear I/O cutouts and rembg BiRefNet

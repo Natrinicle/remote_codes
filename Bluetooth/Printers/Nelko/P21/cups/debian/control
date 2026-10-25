@@ -1,6 +1,6 @@
 Package: printer-driver-nelko
 Source: printer-driver-nelko
-Version: 0.3.5
+Version: 0.3.6
 Section: text
 Priority: optional
 Architecture: all

@@ -61,7 +61,7 @@ From this directory:
 ```
 make check
 make deb
-sudo dpkg -i printer-driver-aimotech_0.3.5_all.deb
+sudo dpkg -i printer-driver-aimotech_0.3.6_all.deb
 sudo apt-get install -f
 ```
 

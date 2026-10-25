@@ -1,3 +1,10 @@
+printer-driver-nelko (0.3.6) unstable; urgency=low
+
+  * Rebuild so the installed PPD FileVersion matches git (0.3.6).
+    The 0.3.5 .deb was built before the dash-URI FileVersion bump.
+
+ -- remote_codes pack <remote-codes@example.com>  Sun, 25 Oct 2026 14:21:25 -0700
+
 printer-driver-nelko (0.3.5) unstable; urgency=low
 
   * Advertise dash-separated MAC hosts (nelko://AA-BB-CC-DD-EE-FF).

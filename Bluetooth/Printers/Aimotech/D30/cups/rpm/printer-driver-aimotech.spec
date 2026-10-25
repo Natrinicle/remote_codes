@@ -1,5 +1,5 @@
 Name:           printer-driver-aimotech
-Version:        0.3.5
+Version:        0.3.6
 Release:        1%{?dist}
 Summary:        CUPS driver for Aimotech D30 Print Master label printers
 License:        CC0
@@ -43,6 +43,8 @@ fi
 %license %{_prefix}/share/doc/printer-driver-aimotech/copyright
 
 %changelog
+* Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.6-1
+- Rebuild so installed PPD FileVersion matches git
 * Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.5-1
 - Dash-separated MAC hosts so CUPS lpadmin does not treat colons as a port
 * Sat Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.4-1
