@@ -77,6 +77,7 @@ when `f49845p != 0`.
 ```
 
 CUPS: [cups/](cups/) (`printer-driver-aimotech`, URI
-`aimotech://AA:BB:CC:DD:EE:FF`, `drv:///aimotech.drv/aimotechd30.ppd`).
+`aimotech://AA-BB-CC-DD-EE-FF`, `drv:///aimotech.drv/aimotechd30.ppd`).
+Dash-separated MAC hosts; CUPS rejects colon octets as a port.
 Package install is root once; queue add is the `lpadmin` group;
 `lp`/`lpr` needs no root. Do not commit the built `.deb`.

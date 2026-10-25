@@ -1,3 +1,12 @@
+printer-driver-aimotech (0.3.5) unstable; urgency=low
+
+  * Advertise dash-separated MAC hosts (aimotech://AA-BB-CC-DD-EE-FF).
+    CUPS httpSeparateURI treats colon octets as a port, so lpadmin
+    rejects colon-form URIs. Backend still parses colon, dash, and
+    12-hex forms; RFCOMM uses colon MACs.
+
+ -- remote_codes pack <remote-codes@example.com>  Sun, 25 Oct 2026 00:00:00 +0000
+
 printer-driver-aimotech (0.3.4) unstable; urgency=low
 
   * CUPS driver for Aimotech D30 / Print Master RFCOMM ESC/POS GS v 0.

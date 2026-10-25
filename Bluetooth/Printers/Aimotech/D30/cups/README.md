@@ -10,9 +10,11 @@ a phone/LAN path and is not this driver. This is not a Windows WHQL
 or kernel module. Do not send Nelko `SIZE`/`GAP` TSPL here. Do not
 invent GATT `FFE0`.
 
-URI: `aimotech://AA:BB:CC:DD:EE:FF` (replace with the printer MAC). Do
-not put a live MAC in the pack. Match BLE name **D30** / Print Master /
-Phomemo / Quin. Do not offer a Nelko P21 this URI.
+URI: `aimotech://AA-BB-CC-DD-EE-FF` (dash-separated MAC). CUPS treats
+colons in the host as a port, so `lpadmin` rejects colon-form URIs.
+The backend still parses colon, dash, and 12-hex forms; RFCOMM uses
+colon MACs. Do not put a live MAC in the pack. Match BLE name **D30**
+/ Print Master / Phomemo / Quin. Do not offer a Nelko P21 this URI.
 
 Frames are recovered from Print Master 5.23.1. **Live D30 eject is
 unproven** in this pack revision.
@@ -59,7 +61,7 @@ From this directory:
 ```
 make check
 make deb
-sudo dpkg -i printer-driver-aimotech_0.3.4_all.deb
+sudo dpkg -i printer-driver-aimotech_0.3.5_all.deb
 sudo apt-get install -f
 ```
 
@@ -93,7 +95,7 @@ aimotech-setup-printer --mac 01:23:45:67:89:AB
 ```
 
 ```
-lpadmin -p AimotechD30 -E -v aimotech://01:23:45:67:89:AB \
+lpadmin -p AimotechD30 -E -v aimotech://01-23-45-67-89-AB \
   -m drv:///aimotech.drv/aimotechd30.ppd
 ```
 
@@ -127,7 +129,7 @@ make check
 ./aimotech-setup-printer --dry-run --mac 01:23:45:67:89:AB
 ```
 
-`DEVICE_URI=aimotech://01:23:45:67:89:AB ./backend-aimotech 1 user title 1 '' /tmp/d30-cups.bin`
+`DEVICE_URI=aimotech://01-23-45-67-89-AB ./backend-aimotech 1 user title 1 '' /tmp/d30-cups.bin`
 sends that job. Ask before a live send; the backend writes RFCOMM.
 
 ## Checks
@@ -143,6 +145,10 @@ make check
 ## Troubleshooting
 
 CUPS ignores a world-executable backend. Keep `aimotech` mode 0700.
+
+`lpadmin` rejects colon MACs as a port. Advertise dash hosts
+(`aimotech://AA-BB-CC-DD-EE-FF`). The backend still parses colon, dash,
+and 12-hex forms.
 
 If Add Printer shows no `aimotech://` device, the printer is off, BlueZ
 has not seen it yet, or the name is not in the D30 family. Type the

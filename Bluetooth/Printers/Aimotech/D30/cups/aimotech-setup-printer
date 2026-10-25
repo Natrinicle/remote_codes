@@ -94,7 +94,7 @@ def discover() -> list[tuple[str, str]]:
 
 
 def add_queue(name: str, addr: str, *, dry_run: bool) -> int:
-    uri = f"aimotech://{addr}"
+    uri = f"aimotech://{aimotech_bt.uri_host(addr)}"
     if dry_run:
         print(f"{LPADMIN} -p {name} -E -v {uri} -m {DRV_MODEL}")
         return 0
@@ -145,7 +145,7 @@ def main(argv: list[str] | None = None) -> int:
             print("no D30-class BlueZ devices (power the printer, wait, retry)")
             return 0
         for addr, name in devices:
-            print(f"aimotech://{addr}  {name}")
+            print(f"aimotech://{aimotech_bt.uri_host(addr)}  {name}")
         return 0
     addr = None
     if args.mac:
@@ -166,7 +166,10 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print("aimotech-setup-printer: several devices, pass --mac:", file=sys.stderr)
         for dev_addr, name in devices:
-            print(f"  aimotech://{dev_addr}  {name}", file=sys.stderr)
+            print(
+                f"  aimotech://{aimotech_bt.uri_host(dev_addr)}  {name}",
+                file=sys.stderr,
+            )
         return 3
     return add_queue(args.name, addr, dry_run=args.dry_run)
 

@@ -12,8 +12,9 @@ channel 1**, unpaired. Query `CONFIG?` / `BATTERY?` / `ESC ! ?` /
 This unit has no separate feed button (power button only).
 
 Helpers print payloads. They do not scan, GATT-connect, or open
-RFCOMM. CUPS backend/filter/PPD: [cups/](cups/). LAN IPP / phone web
-upload: [label-bridge](../../label-bridge/).
+RFCOMM. CUPS backend/filter/PPD: [cups/](cups/). Live `lp` through
+`printer-driver-nelko` ejected 2026-10-25 (PNG → rastertonelko →
+RFCOMM). LAN IPP / phone web upload: [label-bridge](../../label-bridge/).
 
 APK RE (`LabelCommand` / `BluetoothHelper.convertPrintData2Bytes`) was
 incomplete for a live eject (SIZE 12, DIRECTION 0,0, BITMAP mode 0,
@@ -110,6 +111,8 @@ the print path.
 ./encode_nelko.py nfc
 ```
 
-CUPS: [cups/](cups/) (`printer-driver-nelko`, URI `nelko://AA:BB:CC:DD:EE:FF`,
-`drv:///nelko.drv/nelkop21.ppd`). Package install is root once; queue add
-is the `lpadmin` group; `lp`/`lpr` needs no root.
+CUPS: [cups/](cups/) (`printer-driver-nelko`, URI
+`nelko://AA-BB-CC-DD-EE-FF`, `drv:///nelko.drv/nelkop21.ppd`). Package
+install is root once; queue add is the `lpadmin` group; `lp`/`lpr`
+needs no root. Dash-separated MAC hosts; CUPS rejects colon octets as
+a port.

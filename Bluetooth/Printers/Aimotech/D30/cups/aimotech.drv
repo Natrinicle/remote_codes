@@ -8,7 +8,7 @@
 #include <media.defs>
 
 Manufacturer "Aimotech"
-Version "0.3.4"
+Version "0.3.5"
 DriverType label
 Throughput 4
 ColorDevice no

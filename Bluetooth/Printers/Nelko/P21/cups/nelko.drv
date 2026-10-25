@@ -8,7 +8,7 @@
 #include <media.defs>
 
 Manufacturer "Nelko"
-Version "0.3.3"
+Version "0.3.5"
 DriverType label
 Throughput 4
 ColorDevice no

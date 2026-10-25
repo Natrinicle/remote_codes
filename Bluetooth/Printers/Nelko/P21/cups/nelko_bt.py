@@ -51,6 +51,20 @@ def is_nelko_name(name: str) -> bool:
     return False
 
 
+def normalize_mac(raw: str) -> str:
+    compact = raw.strip().upper().replace(":", "").replace("-", "")
+    if compact == PLACEHOLDER_MAC.replace(":", ""):
+        raise ValueError("replace AA:BB:CC:DD:EE:FF with the printer Bluetooth MAC")
+    if len(compact) != 12 or any(c not in "0123456789ABCDEF" for c in compact):
+        raise ValueError(f"need six MAC octets, got {raw!r}")
+    return ":".join(compact[i : i + 2] for i in range(0, 12, 2))
+
+
+def uri_host(addr: str) -> str:
+    """Dash-separated MAC so CUPS does not parse colons as a port."""
+    return normalize_mac(addr).replace(":", "-")
+
+
 def parse_uri(uri: str) -> str:
     if not uri:
         raise ValueError("DEVICE_URI is empty")
@@ -61,13 +75,7 @@ def parse_uri(uri: str) -> str:
             break
     else:
         raise ValueError(f"DEVICE_URI must be nelko://MAC, got {uri!r}")
-    rest = rest.strip().strip("/")
-    if rest.lower() == PLACEHOLDER_MAC.lower():
-        raise ValueError("replace AA:BB:CC:DD:EE:FF with the printer Bluetooth MAC")
-    parts = rest.split(":")
-    if len(parts) != 6 or any(len(p) != 2 for p in parts):
-        raise ValueError(f"need six MAC octets, got {rest!r}")
-    return rest.upper()
+    return normalize_mac(rest.strip().strip("/"))
 
 
 def parse_bluetoothctl(text: str) -> list[tuple[str, str]]:
@@ -154,7 +162,7 @@ def cups_device_line(addr: str, name: str) -> str:
     make_model = cups_quote(f"Nelko {model}")
     info = cups_quote(f"{model} RFCOMM TSPL")
     devid = cups_quote(f"MFG:Nelko;MDL:{model};CMD:TSPL;CLS:PRINTER;")
-    return f'direct nelko://{addr} "{make_model}" "{info}" "{devid}" ""'
+    return f'direct nelko://{uri_host(addr)} "{make_model}" "{info}" "{devid}" ""'
 
 
 def discover_lines(devices: list[tuple[str, str]] | None = None) -> list[str]:
@@ -165,8 +173,17 @@ def discover_lines(devices: list[tuple[str, str]] | None = None) -> list[str]:
 
 def self_test() -> None:
     assert parse_uri("nelko://01:23:45:67:89:ab") == "01:23:45:67:89:AB"
+    assert parse_uri("nelko://01-23-45-67-89-AB") == "01:23:45:67:89:AB"
+    assert parse_uri("nelko://0123456789ab") == "01:23:45:67:89:AB"
+    assert uri_host("01:23:45:67:89:AB") == "01-23-45-67-89-AB"
     try:
         parse_uri("nelko://AA:BB:CC:DD:EE:FF")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("placeholder MAC must fail")
+    try:
+        parse_uri("nelko://AABBCCDDEEFF")
     except ValueError:
         pass
     else:
@@ -188,7 +205,7 @@ def self_test() -> None:
     got = parse_bluetoothctl(sample)
     assert got == [("01:23:45:67:89:AB", "P21"), ("0A:0B:0C:0D:0E:0F", "Nelko P21")]
     line = cups_device_line("01:23:45:67:89:AB", "P21")
-    assert line.startswith("direct nelko://01:23:45:67:89:AB ")
+    assert line.startswith("direct nelko://01-23-45-67-89-AB ")
     assert "MFG:Nelko;MDL:P21;CMD:TSPL;" in line
     assert parse_bluez_info("[General]\nName=P21\n", "01:23:45:67:89:ab") == (
         "01:23:45:67:89:AB",

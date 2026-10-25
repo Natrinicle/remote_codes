@@ -91,7 +91,7 @@ def discover() -> list[tuple[str, str]]:
 
 
 def add_queue(name: str, addr: str, *, dry_run: bool) -> int:
-    uri = f"nelko://{addr}"
+    uri = f"nelko://{nelko_bt.uri_host(addr)}"
     if dry_run:
         print(f"{LPADMIN} -p {name} -E -v {uri} -m {DRV_MODEL}")
         return 0
@@ -142,7 +142,7 @@ def main(argv: list[str] | None = None) -> int:
             print("no P21-class BlueZ devices (power the printer, wait, retry)")
             return 0
         for addr, name in devices:
-            print(f"nelko://{addr}  {name}")
+            print(f"nelko://{nelko_bt.uri_host(addr)}  {name}")
         return 0
     addr = None
     if args.mac:
@@ -163,7 +163,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print("nelko-setup-printer: several devices, pass --mac:", file=sys.stderr)
         for dev_addr, name in devices:
-            print(f"  nelko://{dev_addr}  {name}", file=sys.stderr)
+            print(f"  nelko://{nelko_bt.uri_host(dev_addr)}  {name}", file=sys.stderr)
         return 3
     return add_queue(args.name, addr, dry_run=args.dry_run)
 

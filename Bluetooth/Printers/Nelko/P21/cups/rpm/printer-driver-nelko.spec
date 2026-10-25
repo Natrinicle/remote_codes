@@ -1,5 +1,5 @@
 Name:           printer-driver-nelko
-Version:        0.3.3
+Version:        0.3.5
 Release:        1%{?dist}
 Summary:        CUPS driver for Nelko P21 Bluetooth label printers
 License:        CC0
@@ -38,5 +38,7 @@ fi
 %license %{_prefix}/share/doc/printer-driver-nelko/copyright
 
 %changelog
+* Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.5-1
+- Dash-separated MAC hosts so CUPS lpadmin does not treat colons as a port
 * Sat Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.3-1
 - Initial CUPS driver package for Nelko P21 RFCOMM TSPL2

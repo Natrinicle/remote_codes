@@ -1,3 +1,12 @@
+printer-driver-nelko (0.3.5) unstable; urgency=low
+
+  * Advertise dash-separated MAC hosts (nelko://AA-BB-CC-DD-EE-FF).
+    CUPS httpSeparateURI treats colon octets as a port, so lpadmin
+    rejects nelko://AA:BB:CC:DD:EE:FF. Backend still parses colon,
+    dash, and 12-hex forms; RFCOMM uses colon MACs.
+
+ -- remote_codes pack <remote-codes@example.com>  Sun, 25 Oct 2026 00:00:00 +0000
+
 printer-driver-nelko (0.3.3) unstable; urgency=low
 
   * CUPS driver for Nelko P21 RFCOMM TSPL2.

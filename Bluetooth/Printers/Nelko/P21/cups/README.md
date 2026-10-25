@@ -9,9 +9,12 @@ This is the native CUPS path. The label-bridge IPP server on :8631 is
 a phone/LAN path and is not this driver. This is not a Windows WHQL
 or kernel module.
 
-URI: `nelko://AA:BB:CC:DD:EE:FF` (replace with the printer MAC). Do not
-put a live MAC in the pack. Match BLE name **P21**. Do not send TSPL to
-other `0000ff00` devices.
+URI: `nelko://AA-BB-CC-DD-EE-FF` (dash-separated MAC). CUPS treats
+colons in the host as a port, so `lpadmin` rejects
+`nelko://AA:BB:CC:DD:EE:FF`. The backend still parses colon, dash, and
+12-hex forms; RFCOMM uses colon MACs. Do not put a live MAC in the
+pack. Match BLE name **P21**. Do not send TSPL to other `0000ff00`
+devices.
 
 ## Who does what
 
@@ -56,7 +59,7 @@ From this directory:
 ```
 make check
 make deb
-sudo dpkg -i printer-driver-nelko_0.3.3_all.deb
+sudo dpkg -i printer-driver-nelko_0.3.5_all.deb
 sudo apt-get install -f
 ```
 
@@ -86,7 +89,7 @@ nelko-setup-printer --mac 01:23:45:67:89:AB
 ```
 
 ```
-lpadmin -p NelkoP21 -E -v nelko://01:23:45:67:89:AB \
+lpadmin -p NelkoP21 -E -v nelko://01-23-45-67-89-AB \
   -m drv:///nelko.drv/nelkop21.ppd
 ```
 
@@ -120,7 +123,7 @@ make check
 ./nelko-setup-printer --dry-run --mac 01:23:45:67:89:AB
 ```
 
-`DEVICE_URI=nelko://01:23:45:67:89:AB ./backend-nelko 1 user title 1 '' /tmp/p21-cups.tspl`
+`DEVICE_URI=nelko://01-23-45-67-89-AB ./backend-nelko 1 user title 1 '' /tmp/p21-cups.tspl`
 sends that job. Ask before a live send; the backend writes RFCOMM.
 
 ## Checks
@@ -136,6 +139,10 @@ make check
 ## Troubleshooting
 
 CUPS ignores a world-executable backend. Keep `nelko` mode 0700.
+
+`lpadmin` rejects colon MACs (`nelko://AA:BB:CC:DD:EE:FF`) as a port.
+Advertise dash hosts (`nelko://AA-BB-CC-DD-EE-FF`). The backend still
+parses colon, dash, and 12-hex forms.
 
 If Add Printer shows no `nelko://` device, the printer is off, BlueZ
 has not seen it yet, or the name is not in the P21 family. Type the

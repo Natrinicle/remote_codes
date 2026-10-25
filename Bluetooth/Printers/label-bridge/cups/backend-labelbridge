@@ -4,7 +4,7 @@
 # When this file is copied to /usr/lib/cups/backend/labelbridge, set
 # LABELBRIDGE_HOME to the folder that contains labelbridge.py (or install
 # that folder at /usr/share/labelbridge). The P21-native driver is
-# Bluetooth/Printers/Nelko/P21/cups/ (URI nelko://MAC).
+# Bluetooth/Printers/Nelko/P21/cups/ (URI nelko://dash-MAC).
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 if [[ -n "${LABELBRIDGE_HOME:-}" && -f "${LABELBRIDGE_HOME}/labelbridge.py" ]]; then
