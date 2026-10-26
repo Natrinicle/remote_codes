@@ -26,6 +26,9 @@ those folders has its own README.
 | BLS-70-25RC LED solar light bulb | [Infrared/Lights/BLS/BLS-70-25RC](Infrared/Lights/BLS/BLS-70-25RC/) | `BLS_BLS-70-25RC.ir` | NEC, address `0x80` |
 | HeatGenie parking diesel heater | [Bluetooth/HVAC/Bogu/HeatGenie](Bluetooth/HVAC/Bogu/HeatGenie/) | `encode_heatgenie.py` | BLE 181A / 3A00-3A01, AA+CRC16 |
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
+| Ogemray SmartConfig | [Network/WiFi_Provision/Ogemray](Network/WiFi_Provision/Ogemray/) | `encode_ogemray.py` | dest `239.i.b0.b1` UDP 7070 `multicastmsg` |
+| ESP-TOUCH (Espressif) | [Network/WiFi_Provision/ESP_TOUCH](Network/WiFi_Provision/ESP_TOUCH/) | `encode_esptouch.py` | GuideCode 515/514/513/512 UDP 7001 |
+| Weight Gurus WiFi scale 0396 | [Network/Scales/Greater_Goods/0396](Network/Scales/Greater_Goods/0396/) | product card | Greater Goods SKU 0396; shouts via Ogemray / ESP-TOUCH helpers |
 | SRNE hybrid USB UART | [Serial/Inverters/SRNE](Serial/Inverters/SRNE/) | `encode_srne.py` | Modbus RTU FC3/FC6, 9600 8N1 |
 | Voltronic Axpert / InfiniSolar | [Serial/Inverters/Voltronic](Serial/Inverters/Voltronic/) | `encode_voltronic.py` | ASCII QPIGS HID or UART |
 | JBD / Xiaoxiang BMS | [Bluetooth/BMS/JBD](Bluetooth/BMS/JBD/) | `encode_jbd.py` | BLE GATT `FF00` / `FF01` / `FF02`, `DD A5` / `77` |
@@ -56,9 +59,12 @@ Bluetooth/
   Printers/Aimotech/D30/cups/
   Printers/label-bridge/
 Network/
+  WiFi_Provision/Ogemray/
+  WiFi_Provision/ESP_TOUCH/
   Inverters/EyeBond/SmartESS/
   Inverters/GoodWe/
   Inverters/Luxpower/
+  Scales/Greater_Goods/0396/
 Serial/
   Inverters/SRNE/
   Inverters/Voltronic/
@@ -81,7 +87,7 @@ IR:
 
 BLE: same type/brand/model tree under `Bluetooth/`. Put framing in `encode_*.py` and the unit README. Do not commit APKs. Recover unknown framing with **reverse-engineering-protocols**.
 
-LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58899 or listen on TCP 8899. Do not commit APKs, collector serials, or site IPs. Do not port-forward those ports.
+LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58899, 7070, 7001, or listen on TCP 8899 / 10001. Do not commit APKs, collector serials, site IPs, SSIDs, or PSKs. Do not port-forward those ports. A SmartConfig shout airs the PSK — print the dest map, do not send it from the helper.
 
 Serial: same tree under `Serial/` for USB UART, USB HID, RS485, and CAN. Helpers print payloads; they do not open `/dev/ttyUSB0` or `/dev/hidraw0`. A CH340 stick is not automatically Voltronic. BLE GATT (including JBD `FF00`) lives under `Bluetooth/`.
 
@@ -101,6 +107,7 @@ rules load when the repo is opened in Claude Code or Grok.
 | `decompile-firmware` | [`.claude/skills/decompile-firmware`](.claude/skills/decompile-firmware/) |
 | `skill-toolkit-sync` | [`.claude/rules/skill-toolkit-sync.md`](.claude/rules/skill-toolkit-sync.md) |
 | `skill-composition` | [`.claude/rules/skill-composition.md`](.claude/rules/skill-composition.md) |
+| `pack-artifact-names` | [`.claude/rules/pack-artifact-names.md`](.claude/rules/pack-artifact-names.md) |
 
 Use the skills for new captures: photos (cutout onto white for dense I/O; keep
 camera files as `*.ignore.jpg`), included manuals (`classify_shots.py` then

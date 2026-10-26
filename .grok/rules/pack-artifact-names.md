@@ -1,0 +1,1 @@
+../../.claude/rules/pack-artifact-names.md

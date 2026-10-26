@@ -11,6 +11,14 @@ channel 1**, unpaired. Query `CONFIG?` / `BATTERY?` / `ESC ! ?` /
 `DIRECTION 1,1`, `DENSITY 15`, `BITMAP` **mode 1**, **0 bit = black**.
 This unit has no separate feed button (power button only).
 
+![Front](unit-front.jpg)
+
+![Top](unit-top.jpg)
+
+![Rear](unit-rear.jpg)
+
+![Bottom](unit-bottom.jpg)
+
 Helpers print payloads. They do not scan, GATT-connect, or open
 RFCOMM. CUPS backend/filter/PPD: [cups/](cups/). Live `lp` through
 `printer-driver-nelko` ejected 2026-10-25 (PNG → rastertonelko →
@@ -26,16 +34,45 @@ name **P21**.
 
 ## Identification
 
-| | |
-|--|--|
-| Maker | Nelko (Ezink / print SDK in the APK) |
+The bottom rating plate is a crop of the real sticker (not redrawn), so
+the IDs below match the hardware.
+
+![Rating plate](label.jpg)
+
+| Field | Value |
+|-------|--------|
+| Brand on plate | NELKO |
+| Name on plate | Label Maker |
+| Model / HVIN | P21 |
+| Input | 5V=1A |
+| FCC ID (printed) | [`2A9RA-P21`](https://fccid.io/2A9RA-P21) |
+| IC | 30037-P21 |
+| Plate manufacturer | Zhongshan Polono Electronic Technology Co., Ltd. |
+| FCC grantee | Zhuhai Nelko Technology Co., Ltd. (FRN 0033187196) |
+| USB-C | charging / CDC `4c4a:4155` (answers `ERROR0` only) |
+| EMAIL on QR sticker | `support` at `nelko.net` |
+| Online chat on QR sticker | nelkoprint.com |
+| Marks on plate | FC, CE, UKCA, PSE, WEEE, KC **214-230433** |
+| Feed control | power button only (concentric rings + lock slider on top) |
+| Maker (app / SDK) | Nelko (Ezink print SDK in the APK) |
 | App | Nelko `com.nelko.printer` |
 | Cloud model | P21, dpi 203, maxWidth 12 mm, command 0, rfidProtocol 1 |
 | Default paper | 14×40 mm GAP, defaultGap 5 mm (NFC `ESC ! o` paper_code) |
 | Transport | RFCOMM ch1 primary. Same TSPL bytes on GATT `ff02` |
 | Same TSPL family | P31S, P22, P24, PL80E, PM220, PM220S |
 
+The plate prints `FCC ID: 2A9RA-P21`. That grant is BLE 2402–2480 MHz
+portable label maker P21, original equipment 2023-05-16 / 2023-12-11.
+
 Do not send NIIMBOT `55 55` XOR or Aimotech `GS v 0` here.
+
+## Test prints
+
+Live jobs on 14×40 mm GAP 5 mm, 2026-10-25: rocket `ZOOM!`, cat `HI!`,
+sun `YAY!`. The last of those went through CUPS queue `NelkoP21`
+(`rastertonelko`). Original print pixels; background removed.
+
+![Test prints](test-print.jpg)
 
 ## Reach
 

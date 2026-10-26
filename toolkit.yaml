@@ -1,5 +1,5 @@
 name: remote_codes
-version: "0.3.6"
+version: "0.3.7"
 description: >
   Flipper Zero IR library plus BLE, LAN, and USB serial protocol notes: pack
   layout, photo cleanup (including dense rear I/O cutouts and rembg BiRefNet
@@ -14,10 +14,13 @@ description: >
   label-bridge
   IPP/AirPrint client for those three), EyeBond/SmartESS
   local hijack (UDP 58899 / TCP 8899,
-  SRNE Modbus RTU; encode_smartess.py), and USB UART/HID/RS485/CAN inverter+BMS
-  (SRNE encode_srne.py, Voltronic QPIGS). Infrared catalog includes ETD-360,
-  BLS-70-25RC, and FUDONI GC888. Trees split by connection: Bluetooth/ vs
-  Network/ vs Serial/.
+  SRNE Modbus RTU; encode_smartess.py), WiFi provision
+  (encode_ogemray.py Ogemray 239.i.b0.b1 UDP 7070 multicastmsg,
+  encode_esptouch.py ESP-TOUCH GuideCode 515/514/513/512 UDP 7001,
+  encode_wifi_provision.py SKU/alias router), and USB
+  UART/HID/RS485/CAN inverter+BMS (SRNE encode_srne.py, Voltronic QPIGS).
+  Infrared catalog includes ETD-360, BLS-70-25RC, and FUDONI GC888. Trees
+  split by connection: Bluetooth/ vs Network/ vs Serial/.
 
 kinds: [agent]
 
@@ -35,4 +38,4 @@ install:
     load. Grok also follows `.grok/skills` (symlinks to `.claude/skills`).
 
 agent_skills_included: 5
-agent_rules_included: 2
+agent_rules_included: 3
