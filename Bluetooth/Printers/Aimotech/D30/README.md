@@ -5,6 +5,18 @@ Master** (`com.project.aimotech.printmaster` 5.23.1, 小标打印). The
 printer SDK is `com.project.aimotech.printer` (Quin / Labelife). Phomemo
 D30 units use the same `D30Printer` class.
 
+This recovered unit is Phomemo-branded (plate Model D30 / HVIN D30B).
+Power button only; paper exits the slot on the short end opposite
+USB-C. A yellow 5 V warning sticker sits next to the USB-C port.
+
+![Front](unit-front.jpg)
+
+![Top](unit-top.jpg)
+
+![Rear](unit-rear.jpg)
+
+![Bottom](unit-bottom.jpg)
+
 Recovered from this XAPK (`PrintMaster_5.23.1_APKPure.xapk`). Helpers
 print payloads. They do not scan, GATT-connect, or open RFCOMM. Frames
 are **unproven on a live D30 this session**.
@@ -16,13 +28,32 @@ GATT UUIDs were not in the decompiled printer package. Do not invent
 
 ## Identification
 
-| | |
-|--|--|
-| Maker | Aimotech (Quin / Phomemo family) |
+The rear rating plate is a crop of the real sticker (not redrawn), so
+the IDs below match the hardware. The silver "Need Help? Scan Me" QR
+above the plate is omitted from `label.jpg` (unit-unique query string).
+
+![Rating plate](label.jpg)
+
+| Field | Value |
+|-------|--------|
+| Brand on plate | Phomemo |
+| Name on plate | Smart Mini Label Maker |
+| Model | D30 |
+| HVIN | D30B |
+| Input | 5V=2A |
+| FCC ID (printed) | [`2ASRB-D30C`](https://fccid.io/2ASRB-D30C) |
+| IC | 29002-D30A |
+| FCC grantee | Zhuhai Quin Technology Co., Ltd. (FRN 0028328375) |
+| FCC equipment model | D30C (grant 2024-07-08, DSS + DTS 2402–2480 MHz) |
+| Marks on plate | FC, BC, CE, WEEE |
+| USB-C | charging; two unused rectangular slots beside the port |
+| Feed control | power button only (round pad on the lid is the paper window) |
+| Maker (app / SDK) | Aimotech (Quin / Phomemo family) |
 | App | Print Master `com.project.aimotech.printmaster` |
 | Class | `D30Printer` extends `QuinPrinter` |
 | Printhead | 96 dots / 12 mm (`D30Printer.N = 12`) |
 | Catalog | DefaultPrinter.json series D30 (largest group) |
+| QR host (rear sticker) | `ms.phomemo.com` with model D30 |
 
 TSPL ASCII (`CXTspl` / `B246DPrinter` / `M128Printer`) is a different
 family in the same APK. This folder is the D30 `GS v 0` path. Do not
