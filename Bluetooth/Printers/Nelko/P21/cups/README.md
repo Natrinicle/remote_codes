@@ -59,7 +59,7 @@ From this directory:
 ```
 make check
 make deb
-sudo dpkg -i printer-driver-nelko_0.3.6_all.deb
+sudo dpkg -i printer-driver-nelko_0.3.7_all.deb
 sudo apt-get install -f
 ```
 
@@ -76,11 +76,17 @@ Debian Depends: `cups` `python3-pil`. Recommends: `bluez`
 
 After install, `lpinfo -m` lists `drv:///nelko.drv/nelkop21.ppd`.
 Power the P21; `lpinfo -v` lists `nelko://` for BlueZ names in the P21
-family (never ogrphy/jbd).
+family (never ogrphy/jbd). After a successful discover, the backend
+writes `/var/cache/cups/nelko.devices` so `lpinfo -v` still lists that
+printer when it is off.
 
 ## Add the queue (lpadmin, once)
 
-Any of these, after the package is installed. Replace the MAC.
+The CUPS dest is what KDE System Settings → Printers shows. It stays
+when the P21 is powered off. **Add Printer** is live Get-Devices; that
+list is empty until BlueZ has seen the printer this boot (or the
+last-seen cache exists). Prefer the setup helper, including while the
+printer is off:
 
 ```
 nelko-setup-printer --list
@@ -90,18 +96,25 @@ nelko-setup-printer --mac 01:23:45:67:89:AB
 
 ```
 lpadmin -p NelkoP21 -E -v nelko://01-23-45-67-89-AB \
-  -m drv:///nelko.drv/nelkop21.ppd
+  -m drv:///nelko.drv/nelkop21.ppd \
+  -D NelkoP21 -o printer-error-policy=retry-job
 ```
+
+`retry-job` keeps jobs in the queue until the printer is back.
+Description (`-D`) is the title in KDE's printer list.
 
 Common UIs (same driver, same backend):
 
 - CUPS web: http://localhost:631/admin → Add Printer
 - GNOME Settings → Printers
-- KDE print-manager
+- KDE System Settings → Printers (the queue list, not Add Printer)
 - `system-config-printer`
 
 Pick the discovered `nelko://` device (or type the URI) and the
-**Nelko P21 RFCOMM TSPL** driver.
+**Nelko P21 RFCOMM TSPL** driver. KDE 6.7's Add Printer connection
+page has no `nelko` scheme; if that UI says the feature is not
+available, use `nelko-setup-printer` then reopen System Settings.
+The list title is Description, not only the queue name.
 
 ## Print (LPR permissions, no root)
 
@@ -144,11 +157,12 @@ CUPS ignores a world-executable backend. Keep `nelko` mode 0700.
 Advertise dash hosts (`nelko://AA-BB-CC-DD-EE-FF`). The backend still
 parses colon, dash, and 12-hex forms.
 
-If Add Printer shows no `nelko://` device, the printer is off, BlueZ
-has not seen it yet, or the name is not in the P21 family. Type the
-URI. Discovery never prints the placeholder MAC. The backend (root)
-also reads `/var/lib/bluetooth` cache when that directory is
-listable.
+If Add Printer shows no `nelko://` device, the printer is off and
+there is no last-seen cache yet, BlueZ has not seen it this boot, or
+the name is not in the P21 family. Pass `--mac` to
+`nelko-setup-printer`. Discovery never prints the placeholder MAC.
+The backend (root) also reads `/var/lib/bluetooth` and
+`/var/cache/cups/nelko.devices` when those paths are listable.
 
 If jobs fail after packaging, check `/var/log/cups/error_log`. An
 AppArmor `cupsd` profile that blocks Bluetooth may need a local

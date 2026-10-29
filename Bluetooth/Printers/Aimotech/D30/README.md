@@ -110,5 +110,8 @@ when `f49845p != 0`.
 CUPS: [cups/](cups/) (`printer-driver-aimotech`, URI
 `aimotech://AA-BB-CC-DD-EE-FF`, `drv:///aimotech.drv/aimotechd30.ppd`).
 Dash-separated MAC hosts; CUPS rejects colon octets as a port.
-Package install is root once; queue add is the `lpadmin` group;
-`lp`/`lpr` needs no root. Do not commit the built `.deb`.
+Package install is root once; queue add is the `lpadmin` group
+(`aimotech-setup-printer --mac …` works while the printer is off);
+`lp`/`lpr` needs no root. KDE System Settings → Printers lists the
+configured dest (Description title) even when the D30 is off. Do not
+commit the built `.deb`.

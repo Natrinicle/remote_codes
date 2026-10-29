@@ -27,5 +27,8 @@ unrelated media or artifact kinds.
    fold IR decode into decompile skills.
 5. New sub-skill only when a kind has its own unpack path or bit-map rules.
    Do not add a sub-skill that only restates the parent.
+6. **CUPS custom backend / KDE persist** → **cups-custom-backend**. Label
+   CUPS packaging in this pack → **cups-label-printer** (REQUIRED
+   cups-custom-backend). Do not grow reverse-engineering-protocols.
 
 Own hardware / own copy only. Do not commit APKs, blobs, or secrets.

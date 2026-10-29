@@ -92,8 +92,9 @@ def discover() -> list[tuple[str, str]]:
 
 def add_queue(name: str, addr: str, *, dry_run: bool) -> int:
     uri = f"nelko://{nelko_bt.uri_host(addr)}"
+    persist = ["-D", name, "-o", "printer-error-policy=retry-job"]
     if dry_run:
-        print(f"{LPADMIN} -p {name} -E -v {uri} -m {DRV_MODEL}")
+        print(f"{LPADMIN} -p {name} -E -v {uri} -m {DRV_MODEL} {' '.join(persist)}")
         return 0
     if not in_lpadmin():
         print(
@@ -104,10 +105,10 @@ def add_queue(name: str, addr: str, *, dry_run: bool) -> int:
     if not Path(LPADMIN).is_file():
         print("nelko-setup-printer: lpadmin missing; install cups", file=sys.stderr)
         return 1
-    cmd = [LPADMIN, "-p", name, "-E", "-v", uri, "-m", DRV_MODEL]
+    cmd = [LPADMIN, "-p", name, "-E", "-v", uri, "-m", DRV_MODEL, *persist]
     proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if proc.returncode != 0 and Path(PPD_PATH).is_file():
-        cmd = [LPADMIN, "-p", name, "-E", "-v", uri, "-P", PPD_PATH]
+        cmd = [LPADMIN, "-p", name, "-E", "-v", uri, "-P", PPD_PATH, *persist]
         proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if proc.returncode != 0:
         err = (proc.stderr or proc.stdout or "").strip()
@@ -115,6 +116,10 @@ def add_queue(name: str, addr: str, *, dry_run: bool) -> int:
         return proc.returncode or 1
     print(f"printer {name} enabled, uri {uri}")
     print(f"print with: lp -d {name} file.png")
+    print(
+        "KDE System Settings → Printers lists this queue by Description; "
+        "it stays when the printer is off. Add Printer is live discovery only."
+    )
     return 0
 
 
@@ -139,7 +144,9 @@ def main(argv: list[str] | None = None) -> int:
     devices = discover()
     if args.list:
         if not devices:
-            print("no P21-class BlueZ devices (power the printer, wait, retry)")
+            print(
+                "no P21-class BlueZ devices; pass --mac to add a queue while the printer is off"
+            )
             return 0
         for addr, name in devices:
             print(f"nelko://{nelko_bt.uri_host(addr)}  {name}")
@@ -156,7 +163,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"using {devices[0][1]} {addr}", file=sys.stderr)
     elif not devices:
         print(
-            "nelko-setup-printer: no P21 found; pass --mac or power the printer",
+            "nelko-setup-printer: no P21 found; pass --mac to add a queue while it is off",
             file=sys.stderr,
         )
         return 3

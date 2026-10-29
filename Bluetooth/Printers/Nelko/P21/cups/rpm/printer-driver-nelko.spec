@@ -1,5 +1,5 @@
 Name:           printer-driver-nelko
-Version:        0.3.6
+Version:        0.3.7
 Release:        1%{?dist}
 Summary:        CUPS driver for Nelko P21 Bluetooth label printers
 License:        CC0
@@ -38,6 +38,9 @@ fi
 %license %{_prefix}/share/doc/printer-driver-nelko/copyright
 
 %changelog
+* Wed Oct 29 2026 remote_codes pack <remote-codes@example.com> - 0.3.7-1
+- Last-seen /var/cache/cups/nelko.devices so Get-Devices lists P21 when off
+- setup helper sets Description and retry-job so the KDE queue persists
 * Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.6-1
 - Rebuild so installed PPD FileVersion matches git
 * Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.5-1

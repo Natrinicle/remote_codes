@@ -1,5 +1,5 @@
 name: remote_codes
-version: "0.3.8"
+version: "0.3.9"
 description: >
   Flipper Zero IR library plus BLE, LAN, and USB serial protocol notes: pack
   layout, photo cleanup (including dense rear I/O cutouts and rembg BiRefNet
@@ -38,5 +38,5 @@ install:
     Open this repo in Claude Code or Grok so `.claude/skills` and `.claude/rules`
     load. Grok also follows `.grok/skills` (symlinks to `.claude/skills`).
 
-agent_skills_included: 5
-agent_rules_included: 3
+agent_skills_included: 6
+agent_rules_included: 4

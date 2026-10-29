@@ -1,5 +1,5 @@
 Name:           printer-driver-aimotech
-Version:        0.3.6
+Version:        0.3.7
 Release:        1%{?dist}
 Summary:        CUPS driver for Aimotech D30 Print Master label printers
 License:        CC0
@@ -43,6 +43,9 @@ fi
 %license %{_prefix}/share/doc/printer-driver-aimotech/copyright
 
 %changelog
+* Tue Oct 27 2026 remote_codes pack <remote-codes@example.com> - 0.3.7-1
+- Last-seen BlueZ cache so Get-Devices still lists the D30 when it is off
+- setup helper sets Description and retry-job so the KDE queue persists
 * Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.6-1
 - Rebuild so installed PPD FileVersion matches git
 * Sun Oct 25 2026 remote_codes pack <remote-codes@example.com> - 0.3.5-1

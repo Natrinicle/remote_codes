@@ -13,3 +13,7 @@ payloads is [label-bridge](label-bridge/).
 | Nelko | RFCOMM ch1 TSPL2 (GATT `ff02` same bytes); CUPS `printer-driver-nelko` | [Nelko](Nelko/) |
 | Aimotech | Classic SPP `00001101`, `GS v 0`; CUPS `printer-driver-aimotech` | [Aimotech](Aimotech/) |
 | (all three) | IPP / AirPrint / web upload | [label-bridge](label-bridge/) |
+
+KDE System Settings → Printers lists **configured CUPS dests** (they
+stay when the printer is off). Add Printer is live Get-Devices. See
+[Nelko P21 cups](Nelko/P21/cups/) and [Aimotech D30 cups](Aimotech/D30/cups/).

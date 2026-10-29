@@ -1,0 +1,1 @@
+../../.claude/rules/cups-label-queue.md

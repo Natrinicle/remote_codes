@@ -61,7 +61,7 @@ From this directory:
 ```
 make check
 make deb
-sudo dpkg -i printer-driver-aimotech_0.3.6_all.deb
+sudo dpkg -i printer-driver-aimotech_0.3.7_all.deb
 sudo apt-get install -f
 ```
 
@@ -82,11 +82,17 @@ Makefile, drv, PPD, backend, filter, and setup helper. Do not commit
 
 After install, `lpinfo -m` lists `drv:///aimotech.drv/aimotechd30.ppd`.
 Power the D30; `lpinfo -v` lists `aimotech://` for BlueZ names in the
-D30 family (never nelko/p21 or ogrphy/jbd).
+D30 family (never nelko/p21 or ogrphy/jbd). After a successful
+discover, the backend writes `/var/cache/cups/aimotech.devices` so
+`lpinfo -v` still lists that printer when it is off.
 
 ## Add the queue (lpadmin, once)
 
-Any of these, after the package is installed. Replace the MAC.
+The CUPS dest is what KDE System Settings → Printers shows. It stays
+when the D30 is powered off. **Add Printer** is live Get-Devices; that
+list is empty until BlueZ has seen the printer this boot (or the
+last-seen cache exists). Prefer the setup helper, including while the
+printer is off:
 
 ```
 aimotech-setup-printer --list
@@ -96,18 +102,26 @@ aimotech-setup-printer --mac 01:23:45:67:89:AB
 
 ```
 lpadmin -p AimotechD30 -E -v aimotech://01-23-45-67-89-AB \
-  -m drv:///aimotech.drv/aimotechd30.ppd
+  -m drv:///aimotech.drv/aimotechd30.ppd \
+  -D AimotechD30 -o printer-error-policy=retry-job
 ```
+
+`retry-job` keeps jobs in the queue until the printer is back.
+Description (`-D`) is the title in KDE's printer list.
 
 Common UIs (same driver, same backend):
 
 - CUPS web: http://localhost:631/admin → Add Printer
 - GNOME Settings → Printers
-- KDE print-manager
+- KDE System Settings → Printers (the queue list, not Add Printer)
 - `system-config-printer`
 
 Pick the discovered `aimotech://` device (or type the URI) and the
-**Aimotech D30 Print Master SPP** driver.
+**Aimotech D30 Print Master SPP** driver. KDE 6.7's Add Printer
+connection page has no `aimotech` scheme; if that UI says the feature
+is not available, use `aimotech-setup-printer` then reopen System
+Settings. The list title is Description (for example **D30 Print
+Master SPP**), not only the queue name.
 
 ## Print (LPR permissions, no root)
 
@@ -150,11 +164,12 @@ CUPS ignores a world-executable backend. Keep `aimotech` mode 0700.
 (`aimotech://AA-BB-CC-DD-EE-FF`). The backend still parses colon, dash,
 and 12-hex forms.
 
-If Add Printer shows no `aimotech://` device, the printer is off, BlueZ
-has not seen it yet, or the name is not in the D30 family. Type the
-URI. Discovery never prints the placeholder MAC. The backend (root)
-also reads `/var/lib/bluetooth` cache when that directory is
-listable.
+If Add Printer shows no `aimotech://` device, the printer is off and
+there is no last-seen cache yet, BlueZ has not seen it this boot, or
+the name is not in the D30 family. Pass `--mac` to
+`aimotech-setup-printer`. Discovery never prints the placeholder MAC.
+The backend (root) also reads `/var/lib/bluetooth` and
+`/var/cache/cups/aimotech.devices` when those paths are listable.
 
 If jobs fail after packaging, check `/var/log/cups/error_log`. An
 AppArmor `cupsd` profile that blocks Bluetooth may need a local

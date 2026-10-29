@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """CUPS backend: nelko://MAC → RFCOMM channel 1.
 
-Discovery (no args) lists live BlueZ devices whose name looks like a
-Nelko TSPL printer. A job reads TSPL from the filter on stdin (or
-argv[6]) and writes it to the printer. Helpers in encode_nelko.py stay
-payload-only; this backend is the socket.
+Discovery (no args) lists BlueZ devices whose name looks like a Nelko
+TSPL printer, plus last-seen names in /var/cache/cups/nelko.devices so
+KDE Add Printer still sees the P21 when it is off. A job reads TSPL
+from the filter on stdin (or argv[6]) and writes it to the printer.
+Helpers in encode_nelko.py stay payload-only; this backend is the socket.
 
 Install mode 0700 owned by root so cupsd runs it as root. LPR users
 only submit jobs. Match BLE name P21. Other 0000ff00 devices (JBD

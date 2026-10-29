@@ -105,9 +105,11 @@ rules load when the repo is opened in Claude Code or Grok.
 | `reverse-engineering-protocols` | [`.claude/skills/reverse-engineering-protocols`](.claude/skills/reverse-engineering-protocols/) |
 | `decompile-mobile-app` | [`.claude/skills/decompile-mobile-app`](.claude/skills/decompile-mobile-app/) |
 | `decompile-firmware` | [`.claude/skills/decompile-firmware`](.claude/skills/decompile-firmware/) |
+| `cups-label-printer` | [`.claude/skills/cups-label-printer`](.claude/skills/cups-label-printer/) (REQUIRED `cups-custom-backend`) |
 | `skill-toolkit-sync` | [`.claude/rules/skill-toolkit-sync.md`](.claude/rules/skill-toolkit-sync.md) |
 | `skill-composition` | [`.claude/rules/skill-composition.md`](.claude/rules/skill-composition.md) |
 | `pack-artifact-names` | [`.claude/rules/pack-artifact-names.md`](.claude/rules/pack-artifact-names.md) |
+| `cups-label-queue` | [`.claude/rules/cups-label-queue.md`](.claude/rules/cups-label-queue.md) |
 
 Use the skills for new captures: photos (cutout onto white for dense I/O; keep
 camera files as `*.ignore.jpg`), included manuals (`classify_shots.py` then

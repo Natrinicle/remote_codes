@@ -1,3 +1,13 @@
+printer-driver-nelko (0.3.7) unstable; urgency=low
+
+  * Remember last-seen P21-class BlueZ names so Get-Devices / KDE Add
+    Printer still lists the printer when it is off.
+  * nelko-setup-printer sets Description and printer-error-policy
+    retry-job so the CUPS queue stays in KDE System Settings → Printers
+    and holds jobs until the printer is back.
+
+ -- remote_codes pack <remote-codes@example.com>  Wed, 29 Oct 2026 07:50:00 -0700
+
 printer-driver-nelko (0.3.6) unstable; urgency=low
 
   * Rebuild so the installed PPD FileVersion matches git (0.3.6).

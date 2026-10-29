@@ -15,7 +15,9 @@ import sys
 from pathlib import Path
 
 DEVICE_LINE = re.compile(r"^Device\s+([0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5})\s+(.*)$")
+CACHE_LINE = re.compile(r"^([0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5})\t(.*)$")
 PLACEHOLDER_MAC = "AA:BB:CC:DD:EE:FF"
+DEVICE_CACHE = Path("/var/cache/cups/nelko.devices")
 ALLOW_PREFIXES = (
     "p21",
     "p31",
@@ -128,6 +130,70 @@ def list_bluez_cache() -> list[tuple[str, str]]:
     return found
 
 
+def parse_device_cache(text: str) -> list[tuple[str, str]]:
+    """Last-seen P21-class devices so Get-Devices still lists them when off."""
+    found: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        match = CACHE_LINE.match(line)
+        if not match:
+            continue
+        try:
+            addr = normalize_mac(match.group(1))
+        except ValueError:
+            continue
+        name = match.group(2).strip()
+        if addr in seen or not is_nelko_name(name):
+            continue
+        seen.add(addr)
+        found.append((addr, name))
+    return found
+
+
+def format_device_cache(devices: list[tuple[str, str]]) -> str:
+    lines = [
+        "# printer-driver-nelko last-seen BlueZ devices",
+        "# MAC<TAB>name. Get-Devices still lists these when the printer is off.",
+    ]
+    seen: set[str] = set()
+    for addr, name in devices:
+        try:
+            mac = normalize_mac(addr)
+        except ValueError:
+            continue
+        label = name.strip()
+        if mac in seen or not is_nelko_name(label):
+            continue
+        seen.add(mac)
+        lines.append(f"{mac}\t{label}")
+        if len(seen) >= 16:
+            break
+    return "\n".join(lines) + "\n"
+
+
+def read_device_cache(path: Path | None = None) -> list[tuple[str, str]]:
+    cache = path or DEVICE_CACHE
+    try:
+        text = cache.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return []
+    return parse_device_cache(text)
+
+
+def write_device_cache(
+    devices: list[tuple[str, str]], path: Path | None = None
+) -> None:
+    cache = path or DEVICE_CACHE
+    try:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_text(format_device_cache(devices), encoding="utf-8")
+    except OSError:
+        return
+
+
 def list_bluez_devices() -> list[tuple[str, str]]:
     env = dict(os.environ)
     env["NO_COLOR"] = "1"
@@ -150,6 +216,13 @@ def list_bluez_devices() -> list[tuple[str, str]]:
         if addr not in seen:
             seen.add(addr)
             merged.append((addr, name))
+    live_seen = set(seen)
+    for addr, name in read_device_cache():
+        if addr not in seen:
+            seen.add(addr)
+            merged.append((addr, name))
+    if live_seen:
+        write_device_cache(merged)
     return merged
 
 
@@ -215,6 +288,27 @@ def self_test() -> None:
         parse_bluez_info("[General]\nName=ogrphy48100aaa\n", "aa:bb:cc:dd:ee:00")
         is None
     )
+    cache_text = (
+        "# comment\n"
+        "01:23:45:67:89:AB\tP21\n"
+        "00:11:22:33:44:55\tD30\n"
+        "AA:BB:CC:DD:EE:FF\tNelko P21\n"
+        "0A:0B:0C:0D:0E:0F\tNelko P21\n"
+    )
+    assert parse_device_cache(cache_text) == [
+        ("01:23:45:67:89:AB", "P21"),
+        ("0A:0B:0C:0D:0E:0F", "Nelko P21"),
+    ]
+    formatted = format_device_cache(
+        [
+            ("01:23:45:67:89:AB", "P21"),
+            ("00:11:22:33:44:55", "D30"),
+            ("AA:BB:CC:DD:EE:FF", "Nelko P21"),
+        ]
+    )
+    assert "01:23:45:67:89:AB\tP21" in formatted
+    assert "D30" not in formatted
+    assert PLACEHOLDER_MAC not in formatted
 
 
 def main(argv: list[str] | None = None) -> int:
