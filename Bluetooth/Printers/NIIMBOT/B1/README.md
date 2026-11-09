@@ -13,8 +13,7 @@ Recovered from the vendor OSS APK (`JCYDY_GOOGLE.apk`): Flutter
 `HeartbeatThread`, `checkSumConsistent`, `xorEnd`,
 `MyBluetoothGattCallback.writeCharacteristic`). Compact GATT UUID bytes
 were not in unpacked `libapp.so` / `libdatajar.so` strings (packed SDK
-zip is malformed). This pack uses the family UART-style table below. Do
-not send HeatGenie `181A` / `FFE0` / `AA55` here.
+zip is malformed). This pack uses the family UART-style table below.
 
 Helpers print payloads. They do not scan or GATT-connect. Frames are
 **unproven on a live B1 this session**.

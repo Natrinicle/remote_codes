@@ -22,6 +22,9 @@ family**, not retail app or SKU, when the bytes are reusable.
   in that table.
 - READMEs name **example products recovered from** (brand, SKU, app id) so
   the catalog still finds Weight Gurus / Nelko / and other recovered units.
+- Unit README covers that folder’s device. Name another product when it
+  shares this unit’s wire, UUID, advertisement, or a sibling path (USB vs
+  BLE vs LAN). Skill **reverse-engineering-protocols** (Device README).
 - IR captures stay `Brand_Model.ir` (flipper-ir-library). Do not rename
   existing HeatGenie / Nelko / JBD encoders under this rule’s first landing.
 - No APKs, live SSIDs, PSKs, or personal MACs in the pack.

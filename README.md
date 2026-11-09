@@ -25,6 +25,7 @@ those folders has its own README.
 | ETD-360 solar street light | [Infrared/Lights/ETD/ETD-360](Infrared/Lights/ETD/ETD-360/) | `ETD_ETD-360.ir` | NEC, address `0x00` |
 | BLS-70-25RC LED solar light bulb | [Infrared/Lights/BLS/BLS-70-25RC](Infrared/Lights/BLS/BLS-70-25RC/) | `BLS_BLS-70-25RC.ir` | NEC, address `0x80` |
 | HeatGenie parking diesel heater | [Bluetooth/HVAC/Bogu/HeatGenie](Bluetooth/HVAC/Bogu/HeatGenie/) | `encode_heatgenie.py` | BLE 181A / 3A00-3A01, AA+CRC16 |
+| Merkury MI-LNL62-999W matrix | [Bluetooth/Matrix Displays/Merkury Innovations/MI-LNL62-999W](Bluetooth/Matrix%20Displays/Merkury%20Innovations/MI-LNL62-999W/) | `encode_mi_matrix.py` | BLE GATT `FFD0` / `FFD1`, `BC…55` |
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
 | Ogemray SmartConfig | [Network/WiFi_Provision/Ogemray](Network/WiFi_Provision/Ogemray/) | `encode_ogemray.py` | dest `239.i.b0.b1` UDP 7070 `multicastmsg` |
 | ESP-TOUCH (Espressif) | [Network/WiFi_Provision/ESP_TOUCH](Network/WiFi_Provision/ESP_TOUCH/) | `encode_esptouch.py` | GuideCode 515/514/513/512 UDP 7001 |
@@ -52,6 +53,7 @@ Bluetooth/
   HVAC/Bogu/HeatGenie/esp32-s3/
   BMS/JBD/
   Inverters/Luxpower/
+  Matrix Displays/Merkury Innovations/MI-LNL62-999W/
   Printers/NIIMBOT/B1/
   Printers/Nelko/P21/
   Printers/Nelko/P21/cups/

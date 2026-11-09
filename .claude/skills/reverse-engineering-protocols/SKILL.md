@@ -2,8 +2,9 @@
 name: reverse-engineering-protocols
 description: >
   Use when source is unavailable and a compiled app or firmware blob must be
-  classified before recovering how it talks (BLE, UART, I2C, HTTP, serial).
-  Not for Flipper photo packaging or decoding an already-captured raw .ir.
+  classified before recovering how it talks (BLE, UART, I2C, HTTP, serial);
+  or when writing the recovered protocol README next to a device. Not for
+  Flipper photo packaging or decoding an already-captured raw .ir.
 ---
 
 # Reverse-engineering protocols
@@ -35,6 +36,13 @@ Run `scripts/unpack_artifact.py <path>`. Hash, kind, likely sources.
 
 Then prove the wire in that sub-skill (live tap, CRC on TX and RX, copy the
 app’s unit conversion). Write the protocol next to the device.
+
+## Device README
+
+Each device or family has its own directory. The unit README covers that
+unit: identification, GATT/UART, frames, helper. Name another product
+when it shares this unit’s wire, UUID, advertisement, or a sibling path
+in this family (USB vs BLE vs LAN).
 
 ## Do not
 
