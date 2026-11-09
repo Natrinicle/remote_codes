@@ -13,6 +13,7 @@ also have a LAN IPP client under [Printers/label-bridge](Printers/label-bridge/)
 | Type | Path |
 |------|------|
 | HVAC | [HVAC](HVAC/) |
+| Lights | [Lights](Lights/) |
 | BMS | [BMS](BMS/) |
 | Inverters | [Inverters](Inverters/) |
 | Matrix Displays | [Matrix Displays](Matrix%20Displays/) |
