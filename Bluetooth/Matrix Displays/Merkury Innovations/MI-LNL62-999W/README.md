@@ -97,6 +97,11 @@ shifts for a second frame. Count 11 is not a clean persist
 length. Persist animation on this unit is **8 frames
 minimum** (empty ids play black) and **10 frames maximum**.
 Later demo-exit sends omit the live solid-red picture.
+2026-11-09 idle persist: 10-frame bouncing yellow two-eye face
+on a dark rainbow. Encoder `fun-face` prints that clip (ids 1..10).
+Eye rows are `#..###..#` (two 2×2 pupils). `.##...##.` punches one
+3-wide hole and reads as a cyclops. A cream 7×7 with mouth `.##.##.`
+read as an @.
 
 ## Identification
 
@@ -315,6 +320,7 @@ Demo-exit then persist count=10: user-confirmed 1–A.
 ./encode_mi_matrix.py animation-end --count 8
 ./encode_mi_matrix.py animation-start --count 10
 ./encode_mi_matrix.py animation-end --count 10
+./encode_mi_matrix.py fun-face
 ```
 
 ### Lamplight (APK ASCII, mapping unproven)

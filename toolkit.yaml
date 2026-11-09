@@ -1,5 +1,5 @@
 name: remote_codes
-version: "0.3.13"
+version: "0.3.14"
 description: >
   Flipper Zero IR library plus BLE, LAN, and USB serial protocol notes: pack
   layout, photo cleanup (including dense rear I/O cutouts and rembg BiRefNet
@@ -7,8 +7,8 @@ description: >
   (HeatGenie E-10 waits for cooldown, then unique-random vent/ON;
   encode_heatgenie.py vent/clear/gear; HeatGenie-S3 UART Afterburner 0x76/0x78;
   JBD encode_jbd.py FF00; MI-LNL62-999W encode_mi_matrix.py FFD0/FFD1 BC…55
-  (devices --list name MI Matrix Display, presets --list 382 factory 16×16);
-  MELK-OA10 encode_magic_lantern.py FFF0/FFF3 7E…EF (213 named effects, scenes 0x31, mic-eq,
+  (devices --list name MI Matrix Display, presets --list 382 factory 16×16, fun-face 10-frame persist);
+  MELK-OA10 encode_magic_lantern.py FFF0/FFF3 7E…EF (213 named effects, 7-color-race OA10 rainbow, scenes 0x31, mic-eq,
   devices --list supported-device catalog);
   NIIMBOT B1 encode_niimbot.py 55 55 XOR on
   e7810a71/bef8d6c9; Nelko P21 encode_nelko.py TSPL2 on RFCOMM ch1

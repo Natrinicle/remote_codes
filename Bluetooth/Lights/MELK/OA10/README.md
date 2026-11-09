@@ -149,6 +149,11 @@ string as `int` and `ModeFragment.sendCMD` calls
 
 `./encode_magic_lantern.py effect --list` prints the same catalog.
 
+On OA10 RGBIC, `7-color-wave` (MODE 83) blends and reads pastel.
+`7-color-race` (MODE 77) `7e05034d06ffff00ef` is the user-confirmed
+rainbow chase. OA10 hides Scenes; do not send `scene rainbow` as the
+first rainbow. Setup: on, RGB brightness 100, mic off, then the effect.
+
 #### Basic (47)
 
 | Name | Slug | MODE |
@@ -471,6 +476,7 @@ cools it, on this WS2812).
 ./encode_magic_lantern.py cct 0 0
 ./encode_magic_lantern.py effect auto-play
 ./encode_magic_lantern.py effect 7-color-jump
+./encode_magic_lantern.py effect 7-color-race
 ./encode_magic_lantern.py scene rainbow
 ./encode_magic_lantern.py mic on
 ./encode_magic_lantern.py mic-eq rhythm
@@ -493,4 +499,5 @@ Write the printed hex to FFF3 without response.
 - Do not send `pin_sequence` / `symphony`.
 - Named effects recovered from APK 6.11.10
   SHA-256 `7530ae09d5b849ed4f59e19994c36ebd639fe02304b21f74482ae46b60e387c0`.
-  Live-unproven except the RGB solids / warn orange already confirmed.
+  Live-proven on OA10 RGBIC: RGB solids, warn orange `255,22,0`, and
+  `7-color-race` MODE 77. `7-color-wave` MODE 83 is live but pastel.

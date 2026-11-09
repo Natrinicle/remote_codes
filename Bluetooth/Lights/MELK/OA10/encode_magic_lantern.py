@@ -124,6 +124,8 @@ EFFECTS: dict[str, tuple[int, str, str]] = {
     "cyan-marquee": (209, "Cyan Marquee", "Basic"),
     "purple-marquee": (210, "Purple Marquee", "Basic"),
     "white-marquee": (211, "White Marquee", "Basic"),
+    # OA10 RGBIC rainbow: 7-color-race is user-confirmed. 7-color-wave
+    # (83) blends and reads pastel. Scene rainbow is hidden on OA10.
     "7-color-race": (77, "7-Color Race", "Basic"),
     "7-color-race-back": (78, "7-Color Race Back", "Basic"),
     "r-g-b-race": (79, "R-G-B Race", "Basic"),
@@ -768,6 +770,9 @@ def self_test() -> None:
     assert effect(resolve_named("auto-play", EFFECTS, kind="effect")) == effect(0)
     assert effect(resolve_named("Auto Play", EFFECTS, kind="effect")) == effect(0)
     assert effect(resolve_named("7-color-jump", EFFECTS, kind="effect")) == effect(193)
+    assert effect(
+        resolve_named("7-color-race", EFFECTS, kind="effect")
+    ) == bytes.fromhex("7e05034d06ffff00ef")
     assert scene(11) == bytes.fromhex("7e05310b07ffff01ef")
     assert scene(resolve_named("rainbow", SCENES, kind="scene")) == scene(11)
     assert resolve_named("Valentine's Day", SCENES, kind="scene") == 26

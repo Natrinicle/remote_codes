@@ -13,6 +13,7 @@ Example:
     ./encode_mi_matrix.py devices --list
     ./encode_mi_matrix.py devices match "MI Matrix Display"
     ./encode_mi_matrix.py presets --list
+    ./encode_mi_matrix.py fun-face
 """
 
 from __future__ import annotations
@@ -111,6 +112,39 @@ SLIDESHOW_MIN_FILL = 8
 SLIDESHOW_MAX_FILL = 10
 SLIDESHOW_PROVEN_FILL = SLIDESHOW_MAX_FILL
 
+# User-confirmed idle persist clip (2026-11-09): 9x9 yellow face, two
+# 2x2 pupils, U mouth, bounce on a dark rainbow. '#' is yellow fill,
+# '.' is ink. Eye rows must be two holes (#..###..#). .##...##. punches
+# one 3-wide center gap and reads as a cyclops. Cream 7x7 with mouth
+# .##.##. read as an @.
+FUN_FACE_YELLOW = (255, 210, 0)
+FUN_FACE_INK = (16, 8, 0)
+FUN_FACE_OPEN = (
+    "..#####..",
+    ".#######.",
+    "#..###..#",
+    "#..###..#",
+    "#########",
+    "##.....##",
+    "#.......#",
+    ".##...##.",
+    "..#####..",
+)
+FUN_FACE_BLINK = (
+    "..#####..",
+    ".#######.",
+    "#########",
+    "#########",
+    "#########",
+    "##.....##",
+    "#.......#",
+    ".##...##.",
+    "..#####..",
+)
+FUN_FACE_BOUNCE_X = (1, 3, 5, 6, 6, 5, 3, 1, 1, 3)
+FUN_FACE_OY = 3
+FUN_FACE_BLINK_FRAMES = frozenset({4, 9})
+
 
 def _hex(data: bytes) -> str:
     return data.hex()
@@ -173,6 +207,54 @@ def persist_demo_exit_short() -> list[bytes]:
     with the red picture replaced the heart; user saw digits 1-A.
     """
     return [power(False), power(True), short_mode(0x13)]
+
+
+def _hsv(hue: float, sat: float, val: float) -> tuple[int, int, int]:
+    h = hue % 360.0
+    chroma = val * sat
+    x = chroma * (1.0 - abs((h / 60.0) % 2.0 - 1.0))
+    m = val - chroma
+    if h < 60:
+        r, g, b = chroma, x, 0.0
+    elif h < 120:
+        r, g, b = x, chroma, 0.0
+    elif h < 180:
+        r, g, b = 0.0, chroma, x
+    elif h < 240:
+        r, g, b = 0.0, x, chroma
+    elif h < 300:
+        r, g, b = x, 0.0, chroma
+    else:
+        r, g, b = chroma, 0.0, x
+    return (int((r + m) * 255), int((g + m) * 255), int((b + m) * 255))
+
+
+def fun_face_pixel_frames() -> list[list[tuple[int, int, int]]]:
+    """Ten 16x16 frames: bouncing two-eye yellow face on a dark rainbow."""
+    out: list[list[tuple[int, int, int]]] = []
+    for index in range(SLIDESHOW_PROVEN_FILL):
+        pixels = [
+            _hsv(index * 36.0 + x * 14.0 + y * 9.0, 1.0, 0.28)
+            for y in range(HEIGHT)
+            for x in range(WIDTH)
+        ]
+        glyph = FUN_FACE_BLINK if index in FUN_FACE_BLINK_FRAMES else FUN_FACE_OPEN
+        ox = FUN_FACE_BOUNCE_X[index]
+        for gy, row in enumerate(glyph):
+            for gx, ch in enumerate(row):
+                x = ox + gx
+                y = FUN_FACE_OY + gy
+                if 0 <= x < WIDTH and 0 <= y < HEIGHT:
+                    pixels[y * WIDTH + x] = (
+                        FUN_FACE_YELLOW if ch == "#" else FUN_FACE_INK
+                    )
+        out.append(pixels)
+    return out
+
+
+def fun_face_persist_frames() -> list[bytes]:
+    """Opcode 0x02 clip ids 1..10. Print-only; send persist-prep then 0x15."""
+    return animation_frames(fun_face_pixel_frames(), first_frame_id=1)
 
 
 def graffiti_start() -> list[bytes]:
@@ -483,6 +565,11 @@ def format_preset_catalog() -> str:
             "count 12 overwrites 1-2"
         ),
         (
+            "fun_face          10-frame yellow two-eye bounce; "
+            "encode_mi_matrix.py fun-face; user-confirmed 2026-11-09; "
+            "eye rows #..###..# (.##...##. reads as one hole)"
+        ),
+        (
             f"lamp_01           {_hex(APK_LAMP['01'])}  "
             f"enum id {LAMP_ENUM_ID_UNPROVEN} exists; name↔hex unproven"
         ),
@@ -633,6 +720,25 @@ def self_test() -> None:
         assert track in presets
     for op_name in FAVORITE_OPS_UNRECOVERED:
         assert op_name in presets
+    assert "fun_face" in presets
+    assert "two-eye" in presets
+    pixels = fun_face_pixel_frames()
+    assert len(pixels) == SLIDESHOW_PROVEN_FILL
+    assert len(pixels[0]) == PIXELS
+    ox0 = FUN_FACE_BOUNCE_X[0]
+    eye_y = (FUN_FACE_OY + 2) * WIDTH
+    assert pixels[0][eye_y + ox0 + 1] == FUN_FACE_INK
+    assert pixels[0][eye_y + ox0 + 2] == FUN_FACE_INK
+    assert pixels[0][eye_y + ox0 + 6] == FUN_FACE_INK
+    assert pixels[0][eye_y + ox0 + 7] == FUN_FACE_INK
+    assert pixels[0][eye_y + ox0 + 3] == FUN_FACE_YELLOW
+    ox4 = FUN_FACE_BOUNCE_X[4]
+    assert pixels[4][eye_y + ox4 + 1] == FUN_FACE_YELLOW
+    clip = fun_face_persist_frames()
+    assert len(clip) == SLIDESHOW_PROVEN_FILL * 10
+    assert clip[0] == ANIM_START_10
+    assert clip[-1] == ANIM_END_10
+    assert clip[1][2] == 1
     assert lamp("01") == APK_LAMP["01"]
     assert lamp("dual") == APK_LAMP["dual"]
 
@@ -725,6 +831,13 @@ def main() -> int:
         action="store_true",
         help="print factory count, lamp hex, unrecovered rows",
     )
+    sub.add_parser(
+        "fun-face",
+        help=(
+            "print 10-frame two-eye yellow bounce persist clip "
+            "(ids 1..10). Send persist-prep, reset, store, slideshow"
+        ),
+    )
     args = parser.parse_args()
 
     if args.cmd == "self-test":
@@ -769,6 +882,9 @@ def main() -> int:
         return 0
     if args.cmd == "persist-prep":
         _print_frames(persist_demo_exit_short())
+        return 0
+    if args.cmd == "fun-face":
+        _print_frames(fun_face_persist_frames())
         return 0
     if args.cmd == "mode":
         raw = args.value.strip().lower()
