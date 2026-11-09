@@ -25,6 +25,8 @@ family**, not retail app or SKU, when the bytes are reusable.
 - Unit README covers that folder’s device. Name another product when it
   shares this unit’s wire, UUID, advertisement, or a sibling path (USB vs
   BLE vs LAN). Skill **reverse-engineering-protocols** (Device README).
+- Family catalogs of app-detected SKUs / name prefixes / UUIDs belong in the
+  protocol encoder + README (print-only `devices --list`).
 - IR captures stay `Brand_Model.ir` (flipper-ir-library). Do not rename
   existing HeatGenie / Nelko / JBD encoders under this rule’s first landing.
 - No APKs, live SSIDs, PSKs, or personal MACs in the pack.
