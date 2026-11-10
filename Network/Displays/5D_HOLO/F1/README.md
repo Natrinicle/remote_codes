@@ -3,6 +3,21 @@
 Wi-Fi SoftAP holographic fan. Control is Holofan HTTP `:80` plus WebSocket
 `:9000`. This is **not** the Android MissYou UDP 50xxx stack.
 
+![Two-blade fan](unit-front.jpg)
+
+![Remote](remote.jpg)
+
+IR clicker sibling (remote currently missing, no Flipper `.ir` yet):
+[Infrared/Displays/5D_HOLO/F1](../../../../Infrared/Displays/5D_HOLO/F1/).
+`unit-front.jpg` is canonical here. `remote.jpg` is a relative git
+symlink to that Infrared card.
+
+Placeholder product shots are cropped from Amazon lookalike
+[B08MWQQHCD](https://www.amazon.com/Hologram-Projector-Holographic-Advertising-Missyou/dp/B08MWQQHCD)
+until own photos exist. The listing is a 2-blade kit plus IR clicker;
+this firmware is Holofan HTTP F1 **116×520×6**, not MissYou UDP. The
+seller graphic's "224 lamp beads" is not this unit's `lights=116`.
+
 Helpers print dest-hex, geometry, `holo-fan` argv, and curl recipes. They
 do not join the AP, POST, or play. Do not pack SSIDs, PSKs, or personal
 MACs. Do not format the TF/SD card. Do not send `switcher=off` unless the

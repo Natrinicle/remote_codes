@@ -1,6 +1,8 @@
 # 5D HOLO
 
 Holographic fans that speak **Holofan HTTP** on SoftAP prefix `5D_`.
+IR clicker (same hardware, remote currently missing):
+[Infrared/Displays/5D_HOLO](../../../Infrared/Displays/5D_HOLO/).
 
 | Model | Path |
 |-------|------|

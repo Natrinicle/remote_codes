@@ -29,6 +29,7 @@ those folders has its own README.
 | MELK-OA10 RGBIC strip | [Bluetooth/Lights/MELK/OA10](Bluetooth/Lights/MELK/OA10/) | `encode_magic_lantern.py` | BLE GATT `FFF0` / `FFF3`, `7E…EF`; 213 named effects (`7-color-race` OA10 rainbow); `devices --list` |
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
 | 5D HOLO F1 holographic fan | [Network/Displays/5D_HOLO/F1](Network/Displays/5D_HOLO/F1/) | `encode_holofan.py` | Holofan HTTP `:80` + WS `:9000`, SoftAP `5D_` |
+| 5D HOLO F1 IR remote | [Infrared/Displays/5D_HOLO/F1](Infrared/Displays/5D_HOLO/F1/) | (capture pending) | Optical IR clicker; symlink to Network `unit-front.jpg` |
 | Ogemray SmartConfig | [Network/WiFi_Provision/Ogemray](Network/WiFi_Provision/Ogemray/) | `encode_ogemray.py` | dest `239.i.b0.b1` UDP 7070 `multicastmsg` |
 | ESP-TOUCH (Espressif) | [Network/WiFi_Provision/ESP_TOUCH](Network/WiFi_Provision/ESP_TOUCH/) | `encode_esptouch.py` | GuideCode 515/514/513/512 UDP 7001 |
 | Weight Gurus WiFi scale 0396 | [Network/Scales/Greater_Goods/0396](Network/Scales/Greater_Goods/0396/) | product card | Greater Goods SKU 0396; shouts via Ogemray / ESP-TOUCH helpers |
@@ -45,6 +46,7 @@ those folders has its own README.
 ```
 Infrared/
   Bluray_Players/Sony/UBP-X700/
+  Displays/5D_HOLO/F1/
   HVAC/Carrier/Air V/
   Lights/BLS/BLS-70-25RC/
   Lights/ETD/ETD-360/
@@ -81,6 +83,8 @@ Serial/
 ```
 
 `Device type / brand / model`, same idea as Flipper-IRDB. Button names on ACs encode the full state (`Cool_75_Auto`) because those remotes do not send "temperature up" as an independent command. If a folder moves, every README that linked to it has to move with it.
+
+Dual-path units (Wi-Fi plus IR, BLE plus USB) get a folder on each tree with sibling README links. Shared photos use **relative git symlinks**: F1 keeps `unit-front.jpg` on the Network card and `remote.jpg` on the Infrared card.
 
 ## Adding another capture
 
