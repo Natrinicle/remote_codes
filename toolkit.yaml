@@ -1,5 +1,5 @@
 name: remote_codes
-version: "0.3.14"
+version: "0.3.15"
 description: >
   Flipper Zero IR library plus BLE, LAN, and USB serial protocol notes: pack
   layout, photo cleanup (including dense rear I/O cutouts and rembg BiRefNet
@@ -17,7 +17,10 @@ description: >
   (CUPS printer-driver-aimotech aimotech://dash-MAC + rastertoaimotech;
   Phomemo D30 unit photos FCC 2ASRB-D30C);
   label-bridge
-  IPP/AirPrint client for those three), EyeBond/SmartESS
+  IPP/AirPrint client for those three), 5D HOLO F1
+  encode_holofan.py Holofan HTTP :80 WS :9000 SoftAP 5D_
+  (devices --list, dest-hex, geometry 116/520/6, curl recipes),
+  EyeBond/SmartESS
   local hijack (UDP 58899 / TCP 8899,
   SRNE Modbus RTU; encode_smartess.py), WiFi provision
   (encode_ogemray.py Ogemray 239.i.b0.b1 UDP 7070 multicastmsg,

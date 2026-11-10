@@ -10,10 +10,12 @@ port-forward collector UDP or TCP.
 
 Reusable provision shouts sit under [WiFi_Provision](WiFi_Provision/).
 [Scales](Scales/) folders are product cards that point at those
-protocols.
+protocols. [Displays](Displays/) is Holofan HTTP holographic fans
+(print-only `encode_holofan.py`; do not join the SoftAP from the helper).
 
 | Type | Path |
 |------|------|
+| Displays | [Displays](Displays/) |
 | WiFi provision | [WiFi_Provision](WiFi_Provision/) |
 | Inverters | [Inverters](Inverters/) |
 | Scales | [Scales](Scales/) |

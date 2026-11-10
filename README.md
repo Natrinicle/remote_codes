@@ -28,6 +28,7 @@ those folders has its own README.
 | Merkury MI-LNL62-999W matrix | [Bluetooth/Matrix Displays/Merkury Innovations/MI-LNL62-999W](Bluetooth/Matrix%20Displays/Merkury%20Innovations/MI-LNL62-999W/) | `encode_mi_matrix.py` | BLE GATT `FFD0` / `FFD1`, `BC…55`; `devices --list` / `presets --list` / `fun-face` |
 | MELK-OA10 RGBIC strip | [Bluetooth/Lights/MELK/OA10](Bluetooth/Lights/MELK/OA10/) | `encode_magic_lantern.py` | BLE GATT `FFF0` / `FFF3`, `7E…EF`; 213 named effects (`7-color-race` OA10 rainbow); `devices --list` |
 | EyeBond SmartESS Wi-Fi collector | [Network/Inverters/EyeBond/SmartESS](Network/Inverters/EyeBond/SmartESS/) | `encode_smartess.py` | UDP 58899 / TCP 8899, SRNE Modbus RTU |
+| 5D HOLO F1 holographic fan | [Network/Displays/5D_HOLO/F1](Network/Displays/5D_HOLO/F1/) | `encode_holofan.py` | Holofan HTTP `:80` + WS `:9000`, SoftAP `5D_` |
 | Ogemray SmartConfig | [Network/WiFi_Provision/Ogemray](Network/WiFi_Provision/Ogemray/) | `encode_ogemray.py` | dest `239.i.b0.b1` UDP 7070 `multicastmsg` |
 | ESP-TOUCH (Espressif) | [Network/WiFi_Provision/ESP_TOUCH](Network/WiFi_Provision/ESP_TOUCH/) | `encode_esptouch.py` | GuideCode 515/514/513/512 UDP 7001 |
 | Weight Gurus WiFi scale 0396 | [Network/Scales/Greater_Goods/0396](Network/Scales/Greater_Goods/0396/) | product card | Greater Goods SKU 0396; shouts via Ogemray / ESP-TOUCH helpers |
@@ -63,6 +64,7 @@ Bluetooth/
   Printers/Aimotech/D30/cups/
   Printers/label-bridge/
 Network/
+  Displays/5D_HOLO/F1/
   WiFi_Provision/Ogemray/
   WiFi_Provision/ESP_TOUCH/
   Inverters/EyeBond/SmartESS/
@@ -91,7 +93,7 @@ IR:
 
 BLE: same type/brand/model tree under `Bluetooth/`. Put framing in `encode_*.py` and the unit README. Do not commit APKs. Recover unknown framing with **reverse-engineering-protocols**.
 
-LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58899, 7070, 7001, or listen on TCP 8899 / 10001. Do not commit APKs, collector serials, site IPs, SSIDs, or PSKs. Do not port-forward those ports. A SmartConfig shout airs the PSK — print the dest map, do not send it from the helper.
+LAN: same tree under `Network/`. Helpers print payloads; they do not bind UDP 58899, 7070, 7001, or listen on TCP 8899 / 10001. They do not join a SoftAP or POST Holofan HTTP. Do not commit APKs, collector serials, site IPs, SSIDs, or PSKs. Do not port-forward those ports. A SmartConfig shout airs the PSK — print the dest map, do not send it from the helper.
 
 Serial: same tree under `Serial/` for USB UART, USB HID, RS485, and CAN. Helpers print payloads; they do not open `/dev/ttyUSB0` or `/dev/hidraw0`. A CH340 stick is not automatically Voltronic. BLE GATT (including JBD `FF00`) lives under `Bluetooth/`.
 
